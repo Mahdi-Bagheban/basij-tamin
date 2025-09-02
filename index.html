@@ -1,0 +1,53 @@
+<!-- به نام خداوند بخشنده‌ی مهربان -->
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>در حال بارگذاری...</title>
+  <style>
+    /* CSS ساده برای صفحه لودینگ */
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Vazirmatn', sans-serif;
+      background-color: #1E5939;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .logo {
+      width: 120px;
+      margin-bottom: 20px;
+    }
+    .spinner {
+      border: 5px solid rgba(255,255,255,0.3);
+      border-top: 5px solid white;
+      border-radius: 50%;
+      width: 50px; height: 50px;
+      animation: spin 1.5s linear infinite;
+      margin: 20px auto;
+    }
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <img class="logo" src="cards-pic/basij-logo.png" alt="لوگوی بسیج" />
+  <div class="spinner"></div>
+  <h1>درگاه پرداخت گروه جهادی بسیج سازمان تأمین اجتماعی</h1>
+  <p>نسخه ۴.۲</p>
+  <p>ساخته شده توسط مهدی باغبانپور</p>
+
+  <script>
+    setTimeout(function(){
+      window.location.href = "cards-form.html";
+    }, 3500); // بعد از ۳.۵ ثانیه به صفحه اصلی می‌رود
+  </script>
+</body>
+</html>
+<!-- ساخته شده توسط مهدی باغبانپور بروجنی -->

@@ -1,0 +1,169 @@
+<!-- به نام خداوند بخشنده‌ی مهربان -->
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>درگاه پرداخت گروه جهادی بسیج سازمان تأمین اجتماعی</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <link rel="stylesheet" href="cards-styles.css">
+</head>
+<body>
+    <div class="header-bar">
+        <a href="#" id="gateway-trigger">درگاه پرداخت گروه جهادی بسیج شهدای سازمان تامین اجتماعی</a>
+    </div>
+
+<style>
+#video-preview-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(40, 70, 30, 0.26);
+  backdrop-filter: blur(8px);
+}
+
+.video-glass-container {
+  position: relative;
+  width: calc(100vw - 72px);
+  height: calc(100vh - 72px);
+  max-width: 1300px;
+  max-height: 720px;
+  aspect-ratio: 16 / 9;
+  background: rgba(255,255,255,0.15);
+  border-radius: 28px;
+  box-shadow: 0 2px 44px rgba(30,60,36,.19);
+  border: 1.5px solid #b4d8ab;
+  backdrop-filter: blur(18px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.video-glass-container video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 22px;
+  box-shadow: 0 0 48px #0006;
+  outline: none;
+  background: rgba(255,255,255,0.06);
+  border: 2px solid #b4d8ab;
+}
+
+.video-close-btn {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 46px; height: 46px;
+  background: linear-gradient(120deg,#f43636,#ff7b7b);
+  border: none;
+  color: #fff;
+  font-size: 2.2rem;
+  font-weight: 900;
+  cursor: pointer;
+  border-radius: 50%;
+  box-shadow: 0 4px 16px #e8575792, 0 2px 8px #fff2;
+  transition: transform .15s;
+  outline: none;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-close-btn:hover {
+  transform: scale(1.14);
+  background: linear-gradient(120deg,#ff4444,#ff8b8b);
+}
+
+@media (max-width: 800px) {
+  .video-glass-container {
+    width: calc(100vw - 20px);
+    height: calc(100vh - 20px);
+    max-width: 98vw;
+    max-height: 75vw;
+    border-radius: 14px;
+  }
+  .video-glass-container video {
+    border-radius: 12px;
+  }
+  .video-close-btn {
+    top: 7px;
+    right: 7px;
+    width: 36px; height: 36px;
+    font-size: 1.2rem;
+  }
+}
+</style>
+
+<div id="video-preview-overlay">
+  <div class="video-glass-container">
+    <button class="video-close-btn" onclick="
+      document.getElementById('video-preview-overlay').style.display='none';
+      var v = document.getElementById('preview-video');
+      if(v) { v.pause(); v.currentTime=0; }
+    ">
+      &times;
+    </button>
+<video id="preview-video" controls autoplay>
+  <source src="https://github.com/Mahdi-Bagheban/basij-tamin/raw/refs/heads/main/preview.mp4" type="video/mp4">
+  مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.
+</video>
+
+  </div>
+</div>
+
+    <main class="gateway-panel" id="gateway-panel" style="display:block;">
+        <div class="cards-bg-green">
+            <div class="cards-container">
+                <div class="card" data-has-submenu="false" data-url="payment-form.html?cause=قلک_بیمه">
+                    <img src="cards-pic/bg-01.jpg" alt="قلک بیمه">
+                    <div class="card-overlay"><div class="card-title">قلک بیمه</div></div>
+                </div>
+                <div class="card" data-has-submenu="true" data-menu='[{"title":"تجهیزات","url":"payment-form.html?cause=نذر_درمانی_تجهیزات"},{"title":"دارو","url":"payment-form.html?cause=نذر_درمانی_دارو"}]'>
+                    <img src="cards-pic/bg-02.jpg" alt="نذر درمانی">
+                    <div class="card-overlay"><div class="card-title">نذر درمانی</div></div>
+                </div>
+                <div class="card" data-has-submenu="true" data-menu='[{"title":"ساخت مراکز درمانی","url":"payment-form.html?cause=نذر_سازندگی_درمانی"},{"title":"ساخت مراکز بیمه ای","url":"payment-form.html?cause=نذر_سازندگی_بیمه"},{"title":"ساخت همراه سرا","url":"payment-form.html?cause=نذر_سازندگی_همراه_سرا"}]'>
+                    <img src="cards-pic/bg-03.jpg" alt="نذر سازندگی">
+                    <div class="card-overlay"><div class="card-title">نذر سازندگی</div></div>
+                </div>
+                <div class="card" data-has-submenu="false" data-url="payment-form.html?cause=نذر_نان">
+                    <img src="cards-pic/bg-04.jpg" alt="نذر نان">
+                    <div class="card-overlay"><div class="card-title">نذر نان</div></div>
+                </div>
+                <div class="card" data-has-submenu="true" data-menu='[{"title":"موکب کربلا","url":"payment-form.html?cause=موکب_کربلا"},{"title":"مواکب سراسر کشور","url":"payment-form.html?cause=مواکب_کشور"},{"title":"چاخانه حضرت رضا (ع)","url":"payment-form.html?cause=چاخانه_رضا"}]'>
+                    <img src="cards-pic/bg-05.jpg" alt="مواکب شهدای بسیج">
+                    <div class="card-overlay"><div class="card-title">مواکب شهدای بسیج</div></div>
+                </div>
+                <div class="card" data-has-submenu="false" data-url="payment-form.html?cause=نذر_قربانی">
+                    <img src="cards-pic/bg-06.jpg" alt="نذر قربانی">
+                    <div class="card-overlay"><div class="card-title">نذر قربانی</div></div>
+                </div>
+                <div class="card" data-has-submenu="true" data-menu='[{"title":"نذر فرهنگی","url":"payment-form.html?cause=نذر_فرهنگی"},{"title":"کمک به خرید جهیزیه","url":"payment-form.html?cause=جهیزیه"},{"title":"کمک هزینه ازدواج","url":"payment-form.html?cause=ازدواج"},{"title":"آزادسازی زندانی","url":"payment-form.html?cause=آزادسازی_زندانی"}]'>
+                    <img src="cards-pic/bg-07.jpg" alt="کمک معیشتی و نذر مؤمنانه">
+                    <div class="card-overlay"><div class="card-title">کمک معیشتی و نذر مؤمنانه</div></div>
+                </div>
+                <div class="card" data-has-submenu="true" data-menu='[{"title":"خمس","submenu":[{"title":"خمس عام","url":"payment-form.html?cause=خمس_عام"},{"title":"خمس سادات","url":"payment-form.html?cause=خمس_سادات"}]},{"title":"کفاره","submenu":[{"title":"کفاره عام","url":"payment-form.html?cause=کفاره_عام"},{"title":"کفاره سادات","url":"payment-form.html?cause=کفاره_سادات"}]},{"title":"فطریه","submenu":[{"title":"فطریه عام","url":"payment-form.html?cause=فطریه_عام"},{"title":"فطریه سادات","url":"payment-form.html?cause=فطریه_سادات"}]},{"title":"خیرات اموات","url":"payment-form.html?cause=خیرات_اموات"},{"title":"ثلث مال","url":"payment-form.html?cause=ثلث_مال"},{"title":"رد مظالم","url":"payment-form.html?cause=رد_مظالم"},{"title":"صدقه","url":"payment-form.html?cause=صدقه"}]'>
+                    <img src="cards-pic/bg-08.jpg" alt="وجوهات شرعی">
+                    <div class="card-overlay"><div class="card-title">وجوهات شرعی</div></div>
+                </div>
+                <div class="card" data-has-submenu="false" data-url="payment-form.html?cause=کمک_به_جبهه_مقاومت">
+                    <img src="cards-pic/bg-09.jpg" alt="کمک به جبهه مقاومت">
+                    <div class="card-overlay"><div class="card-title">کمک به جبهه مقاومت</div></div>
+                </div>
+                <div class="card" data-has-submenu="false" data-url="payment-form.html?cause=نذر_عام">
+                    <img src="cards-pic/bg-10.jpg" alt="نذر عام">
+                    <div class="card-overlay"><div class="card-title">نذر عام</div></div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="cards-scripts.js"></script>
+</body>
+</html>
+<!-- ساخته شده توسط مهدی باغبانپور بروجنی -->
