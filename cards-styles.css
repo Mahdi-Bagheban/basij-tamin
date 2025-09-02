@@ -1,0 +1,185 @@
+/* به نام خداوند بخشنده‌ی مهربان */
+:root {
+    --green-main: #1E5939;
+    --green-accent: #28744a;
+    --glass-border: #b4d8ab;
+    --glass-hover: #e7f3e2;
+    --txt: #163a25;
+    --card-size-desktop: 140px;
+    --card-size-tablet: 118px;
+    --card-size-mobile: 180px;
+}
+
+body {
+    margin: 0;
+    font-family: 'Vazirmatn', sans-serif;
+    background: #FCFADF;
+}
+
+.header-bar {
+    background: var(--green-main);
+    padding: 28px 16px 22px;
+    text-align: center;
+}
+
+#gateway-trigger {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1.16rem;
+    background: var(--green-accent);
+    padding: .7rem 2.2rem;
+    border-radius: 999px;
+    display: inline-block;
+    box-shadow: 0 6px 18px rgba(0,0,0,.12);
+    transition: .2s;
+    letter-spacing: .5px;
+}
+#gateway-trigger:hover { filter: brightness(1.11); }
+
+.gateway-panel {
+    margin: 0;
+    padding: 0 0 80px 0;
+}
+
+.cards-bg-green {
+    background: linear-gradient(180deg, #1E5939 95%, #19592F 100%);
+    margin: 0 auto;
+    padding: 38px 6vw 47px;
+}
+
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(5, var(--card-size-desktop));
+    gap: 20px;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 1300px;
+}
+
+.card {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    background: white;
+    box-shadow: 0 0 8px rgba(255,255,255,0.3), 0 8px 32px rgba(30,60,36,.13);
+    transition: transform .21s, box-shadow .21s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 20px rgba(255,255,255,0.6), 0 8px 32px rgba(30,60,36,.2);
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+.card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: linear-gradient(
+        0deg,
+        var(--green-main) 0%,
+        rgba(30,89,57,0.8) 40%,
+        rgba(30,89,57,0.4) 70%,
+        rgba(30,89,57,0.1) 90%,
+        rgba(30,89,57,0) 100%
+    );
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0 8px 8px 8px;
+    border-radius: 0 0 20px 20px;
+}
+
+.card-title {
+    color: var(--green-main);
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-align: center;
+    background: rgba(255,255,255,0.6);
+    padding: 4px 8px;
+    border-radius: 10px;
+    border: 1px solid rgba(180,216,171,0.3);
+    box-shadow: 0 2px 12px rgba(30,89,57,0.08);
+}
+
+/* tablet: 4 columns */
+@media (max-width: 1100px) {
+    .cards-container {
+        grid-template-columns: repeat(4, var(--card-size-tablet));
+    }
+}
+
+/* mid mobile: 3 columns */
+@media (max-width: 800px) {
+    .cards-container {
+        grid-template-columns: repeat(3, var(--card-size-tablet));
+    }
+}
+
+/* mobile: 2 columns, larger cards */
+@media (max-width: 560px) {
+    .cards-container {
+        grid-template-columns: repeat(2, var(--card-size-mobile));
+        gap: 24px;
+    }
+}
+
+/* منوی شیشه‌ای */
+.dropdown-menu {
+    position: fixed;
+    left: 0; top: 0;
+    min-width: 210px; max-width: 280px;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 9px 40px rgba(30,60,36,.16);
+    border-radius: 17px;
+    border: 1.5px solid var(--glass-border);
+    font-size: 1.13rem;
+    font-family: 'Vazirmatn', sans-serif;
+    font-weight: 700;
+    color: var(--txt);
+    padding: 14px 19px;
+    z-index: 9999;
+    animation: fadeIn .25s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity:.01; transform:scale(.95);}
+    to { opacity:1; transform:scale(1);}
+}
+
+.dropdown-menu ul { list-style: none; margin: 0; padding: 0; }
+.dropdown-menu li {
+    padding: 10px 10px 10px 4px;
+    border-radius: 9px; margin: 1px 0;
+    background: transparent; transition: background .14s;
+    cursor: pointer;
+}
+.dropdown-menu li:hover { background: var(--glass-hover); }
+.dropdown-menu a {
+    color: inherit; text-decoration: none; display: block;
+}
+.dropdown-menu li ul {
+    display: none; margin-top: 6px;
+    border-right: 2px solid var(--glass-border);
+    padding-right: 13px;
+}
+.dropdown-menu li.expanded > ul { display: block; }
+.dropdown-menu .arrow {
+    margin-right: 6px; color: #2f7b4c; font-weight: 900;
+}
+/* ساخته شده توسط مهدی باغبانپور بروجنی */
