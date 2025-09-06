@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>فرم پرداخت نیت خیر</title>
+  <link rel="icon" type="image/png" href="images/logo/icon.png" />
+  <link rel="stylesheet" href="payment-styles.css" />
+</head>
+<body>
+  <main class="pay-shell">
+    <header class="pay-header">
+      <h1 id="page-title">برای انجام ثبت خیرت، اطلاعات را تکمیل کن</h1>
+    </header>
+
+    <section class="form-container glass">
+      <form id="payment-form" novalidate>
+        <div class="grid two">
+          <div class="input-group">
+            <label for="fullname">نام و نام خانوادگی</label>
+            <div class="field-wrapper">
+              <input type="text" id="fullname" placeholder="نام خود را وارد کنید" required />
+            </div>
+            <small class="error"></small>
+          </div>
+          <div class="input-group">
+            <label for="mobile">شماره موبایل</label>
+            <div class="field-wrapper">
+              <input type="tel" id="mobile" inputmode="numeric" placeholder="شماره تلفن همراه خود را وارد کنید" required />
+            </div>
+            <small class="error"></small>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="input-group">
+            <label for="province">استان</label>
+            <div class="field-wrapper">
+              <select id="province" required>
+                <option value="" selected>استان را انتخاب کنید</option>
+              </select>
+            </div>
+            <small class="error"></small>
+          </div>
+          <div class="input-group">
+            <label for="city">شهر</label>
+            <div class="field-wrapper">
+              <select id="city" disabled required>
+                <option value="">ابتدا استان را انتخاب کنید</option>
+              </select>
+            </div>
+            <small class="error"></small>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <div id="intents-wrapper" class="intents-wrapper"></div>
+
+        <div class="summary">
+          <div class="total-line">
+            <span>جمع مبلغ قابل پرداخت:</span>
+            <strong id="grand-total">۰ تومان</strong>
+          </div>
+          <button type="submit" class="btn primary" id="pay-btn">با نام خدا پرداخت می‌کنم</button>
+        </div>
+      </form>
+    </section>
+
+    <footer class="trust-footer">
+      <div class="trust-logos">
+        <img src="images/logo/enamad.png" alt="نماد اعتماد" />
+        <img src="images/logo/samandehi.png" alt="ساماندهی" />
+        <img src="images/logo/shaparak.png" alt="شاپرک" />
+      </div>
+      <small>گروه جهادی بسیج شهدای سازمان تامین اجتماعی — درگاه پرداخت امن</small>
+    </footer>
+  </main>
+
+  <div id="thank-modal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <h3 id="thank-title">سپاس از نیت ارزشمند شما</h3>
+      <p id="thank-message"></p>
+      <button id="redirect-btn" class="btn primary">هدایت به درگاه بانکی</button>
+    </div>
+  </div>
+
+  <script src="payment-scripts.js"></script>
+</body>
+</html>
