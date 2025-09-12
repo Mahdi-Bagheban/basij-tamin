@@ -1,6 +1,6 @@
 <!-- به نام خداوند بخشنده مهربان -->
 <!doctype html>
-<html lang="فا" dir="rtl" data-version="6.7.2">
+<html lang="fa" dir="rtl" data-version="6.7.2">
 <head>
   <!-- Version 6.7.2 -->
   <meta charset="utf-8">
@@ -38,11 +38,11 @@
       --bar-h: 46px;
 
       /* کنترل انیمیشن */
-      --p: 0%;                         /* درصد پیشروی (با JS به‌روزرسانی می‌شود) */
-      --shine-w: clamp(14px, 9vw, 54px);  /* پهنای خط نوری واکنش‌گرا */
-      --shine-alpha: .50;              /* شدت نور مرکزی */
-      --cap-w: clamp(10px, 6vw, 36px); /* پهنای کلاهک نوری جلویی */
-      --cap-alpha: .65;                /* شدت نور کلاهک */
+      --p: 0%;
+      --shine-w: clamp(14px, 9vw, 54px);
+      --shine-alpha: .50;
+      --cap-w: clamp(10px, 6vw, 36px);
+      --cap-alpha: .65;
     }
 
     *{box-sizing:border-box}
@@ -56,15 +56,15 @@
       font-family:system-ui,-apple-system,Segoe UI,Roboto,IRANSans,Vazirmatn,Tahoma,sans-serif;
     }
 
-    /* صفحه تک‌نما */
+    /* صفحه تک‌نما: عنوان بالا، لودینگ وسط؛ فوتر ثابت پایین */
     .page{
       min-height:100vh;
       display:grid;
-      grid-template-rows:auto 1fr auto;
+      grid-template-rows:auto 1fr;     /* نسخه داخل سکشن لودینگ است */
       align-items:start;
       justify-items:center;
       row-gap:var(--gap);
-      padding:16px 16px var(--footer-space);
+      padding:16px 16px var(--footer-space);  /* رزرو فضا برای فوتر ثابت */
     }
 
     /* عنوان تصویری */
@@ -133,7 +133,7 @@
       z-index:1;
       will-change: width;
     }
-    /* کلاهک نوری در لبهٔ پیشروی (چسبیده به راستِ .fill) */
+    /* کلاهک نوری در لبهٔ پیشروی */
     .glass-bar .fill::after{
       content:"";
       position:absolute; top:0; bottom:0; right:-1px;
@@ -148,10 +148,9 @@
       pointer-events:none;
     }
 
-    /* خط نوری اصلی: دقیقاً روی مرز پیشروی، حرکت نرم */
+    /* خط نوری اصلی */
     .glass-bar .shine{
       position:absolute; top:0; height:100%;
-      /* مرکز نور = لبهٔ پیشروی */
       left: calc(var(--p) - (var(--shine-w) / 2));
       width: var(--shine-w);
       z-index:2;
@@ -166,15 +165,16 @@
       will-change: left;
     }
 
-    /* نسخه */
+    /* نسخه (اکنون داخل سکشن لودینگ است) */
     .version{
       font-size:13px;
       color:var(--muted);
       letter-spacing:.3px;
       text-align:center;
+      margin-top: 6px;  /* فاصله از نوار */
     }
 
-    /* کپی‌رایت */
+    /* کپی‌رایت ثابت پایین */
     .credits{
       position:fixed; left:0; right:0; bottom:8px;
       display:flex; justify-content:center; pointer-events:none;
@@ -207,7 +207,7 @@
       <img class="title-banner" src="images/logo/title.png" alt="درگاه پرداخت گروه جهادی بسیج شهدای سازمان تامین اجتماعی">
     </header>
 
-    <!-- لودینگ Lottie + نوار شیشه‌ای -->
+    <!-- لودینگ Lottie + نوار شیشه‌ای + نسخه -->
     <section class="loader" aria-live="polite" aria-busy="true">
       <dotlottie-player
         id="loaderAnim"
@@ -217,16 +217,15 @@
         speed="1"
       ></dotlottie-player>
 
-      <!-- نوار شیشه‌ای -->
       <div class="glass-bar" role="progressbar" aria-label="پیشرفت بارگذاری" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
         <div class="fill"></div>
         <div class="shine"></div>
         <span class="text">در حال آماده‌سازی صفحه درگاه پرداخت…</span>
       </div>
-    </section>
 
-    <!-- نسخه -->
-    <div class="version" aria-label="نسخه">نسخه 6.7.2</div>
+      <!-- نسخه زیر لودینگ و بالای کپی‌رایت -->
+      <div class="version" aria-label="نسخه">نسخه 6.7.2</div>
+    </section>
   </div>
 
   <!-- کپی‌رایت پایین صفحه با تبدیل ۴ ثانیه‌ای -->
