@@ -1,0 +1,13 @@
+{
+  "name": "basij-pay-portal",
+  "version": "6.6.0",
+  "description": "Static site for Basij payment portal (GitHub Pages deploy)",
+  "private": true,
+  "scripts": {
+    "start": "echo \"Static project - open index.html via Live Server\"",
+    "build": "echo \"No build step - static deploy\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}

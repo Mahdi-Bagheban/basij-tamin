@@ -1,0 +1,140 @@
+/* به نام خداوند بخشنده مهربان */
+
+/* فونت‌ها */
+@font-face{font-family:'Vazirmatn';src:url('fonts/Vazirmatn-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Vazirmatn';src:url('fonts/Vazirmatn-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Vazirmatn';src:url('fonts/Vazirmatn-SemiBold.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Vazirmatn';src:url('fonts/Vazirmatn-Bold.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+*{box-sizing:border-box;font-family:'Vazirmatn',sans-serif}
+
+/* رنگ‌ها و متغیرها */
+:root{
+  --green-main:#1E5939;
+  --green-accent:#28744a;
+  --grad:linear-gradient(135deg,#1E5939 0%,#28744a 100%);
+  --text:#163a25;
+  --border:#d8e4d9;
+}
+
+/* پس‌زمینه + فاصله سبز انتهایی تضمینی */
+html,body{height:100%}
+body{
+  margin:0;color:var(--text);
+  background:var(--grad);background-size:400% 400%;
+  animation:bgFlow 14s ease infinite;
+  display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding:24px 24px 28px;
+}
+/* فضای تضمینی سبز زیر کارت */
+body::after{content:"";display:block;height:24px}
+
+@keyframes bgFlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+.pay-shell{width:100%;max-width:920px;margin-bottom:24px}
+.pay-header{text-align:center;margin-bottom:24px}
+.pay-header h1{margin:0;color:#fff;font-weight:800;font-size:1.4rem;text-shadow:0 2px 8px rgba(0,0,0,.28)}
+
+.glass{
+  background:rgba(255,255,255,.82);
+  border:1px solid rgba(255,255,255,.46);
+  border-radius:24px;
+  box-shadow:0 12px 40px rgba(0,0,0,.16);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+}
+
+.form-container{padding:34px 34px 14px}
+
+/* گرید و ورودی‌ها */
+.grid{display:grid;gap:22px}
+.grid.two{grid-template-columns:1fr 1fr}
+@media (max-width:680px){.grid.two{grid-template-columns:1fr}}
+.input-group label{display:block;margin:0 0 10px 0;font-weight:700}
+.field-wrapper{position:relative;background:#fff;border:1.6px solid var(--border);border-radius:14px;min-height:56px;display:flex;align-items:center}
+.field-wrapper input,.field-wrapper select{width:100%;border:0;background:transparent;padding:12px 14px;border-radius:14px;font-size:1rem;line-height:1.4;appearance:none}
+.field-wrapper select:disabled,.field-wrapper input:disabled{opacity:.45;pointer-events:none}
+
+/* خط جداکننده */
+.divider{border:0;height:2px;background:var(--green-main);opacity:.65;margin:22px 0;border-radius:2px}
+
+/* ردیف نیت‌ها */
+.intents-wrapper{display:flex;flex-direction:column;gap:14px}
+.intent-row{background:rgba(255,255,255,.92);border:1.2px solid #ddeee3;border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;min-height:56px;flex-wrap:nowrap}
+.add-intent,.remove-intent{flex:0 0 40px}
+.intent-select{flex:2 1 300px;min-width:170px;position:relative}
+
+/* مبلغ‌ها */
+.amount-holder{flex:2 1 420px;min-width:220px;max-width:100%}
+.custom-holder{display:none;flex:1 1 260px;min-width:200px}
+.amount-holder .field-wrapper,.custom-holder .field-wrapper{min-height:56px}
+.intent-row.custom-visible .amount-holder{flex:1 1 300px}
+.intent-row.custom-visible .custom-holder{display:block}
+
+/* موبایل */
+@media (max-width:640px){
+  .intent-row{flex-wrap:wrap;gap:10px 8px}
+  .add-intent{order:1}
+  .remove-intent{order:1;margin-inline-start:auto}
+  .intent-select{order:2;flex:1 1 100%}
+  .amount-holder{order:3;flex:1 1 100%}
+  .custom-holder{order:4;flex:1 1 100%}
+}
+
+/* دکمه‌ها و پنل نیت */
+.icon-btn{width:40px;height:40px;border-radius:10px;border:1.4px solid #dfe9e2;background:#fff;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+.icon-btn img{width:18px;height:18px}
+.icon-btn[disabled]{opacity:.30;cursor:not-allowed}
+.icon-btn:hover:not([disabled]){background:#f2f8f4}
+.intent-trigger{width:100%;padding:12px;border:1.5px solid var(--border);border-radius:10px;background:#fff;text-align:right;font-weight:700;cursor:pointer}
+.intent-panel{position:absolute;top:calc(100% + 8px);right:0;min-width:260px;max-height:44vh;overflow:auto;background:#fff;border:1.6px solid #e0eee2;border-radius:12px;box-shadow:0 12px 24px rgba(0,0,0,.18);display:none;z-index:1000}
+.intent-panel.open{display:block;animation:fadeIn .18s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.intent-panel ul{list-style:none;margin:0;padding:7px}
+.intent-panel li{margin:2px 0}
+.intent-panel .menu-item{width:100%;text-align:right;border:none;background:transparent;padding:9px 12px;border-radius:8px;font-weight:700;cursor:pointer}
+.intent-panel .menu-item:hover{background:#eef6f0;color:#28744a}
+
+/* خلاصه پرداخت و دکمه */
+.summary{position:relative;text-align:center;margin-top:18px}
+.total-line{display:inline-flex;gap:8px;align-items:center;background:#fff;border:2px solid #28744a;border-radius:12px;padding:12px 18px;font-weight:800;color:#1E5939;margin:0 0 10px}
+.btn{border:none;border-radius:12px;padding:14px 22px;font-weight:800;cursor:pointer;transition:transform .12s ease,filter .12s ease}
+.btn.primary{background:var(--grad);color:#fff;box-shadow:0 6px 20px rgba(40,116,74,.28)}
+.btn.primary:hover{transform:translateY(-2px)}
+
+/* فاصله کم بین جمع مبلغ و دکمه؛ JS در صورت نیاز فقط به اندازه لازم افزایش می‌دهد */
+.pay-actions{position:relative;display:grid;place-items:center;margin-top:12px;padding-bottom:0}
+
+/* دسته‌گل: موقعیت مطلق در مرکز فاصله (top با JS) */
+#bouquet{
+  position:absolute;left:50%;transform:translateX(-50%);top:0;
+  display:flex;gap:0;justify-content:center;align-items:flex-end;pointer-events:none;flex-wrap:wrap;max-width:92%;z-index:3;
+}
+#bouquet img{height:40px;margin:0 -10px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.18));transform:rotate(var(--rot,0deg)) translateY(var(--y,0px))}
+
+/* اعتماد و برند */
+.trust-footer{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:32px;padding:16px;background:rgba(255,255,255,.93);border-radius:16px}
+.trust-logos{display:flex;gap:20px;align-items:center;flex-wrap:wrap;justify-content:center}
+.trust-logos img{height:46px}
+.brand-title{display:grid;place-items:center;width:100%}
+.brand-mask{display:block;width:min(520px,72%);height:50px;background-color:#1E5939;-webkit-mask-image:url('images/logo/cards-page-title-desktop.png');mask-image:url('images/logo/cards-page-title-desktop.png');-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain;opacity:.98}
+
+/* کپی‌رایت با کراس‌فید نرم دوطرفه */
+.credit-inline{display:grid;place-items:center;margin-top:18px;margin-bottom:2px}
+.credit-inline .line{position:absolute;opacity:0;color:rgba(30,89,57,.62);font-weight:800;text-align:center;font-size:11px;line-height:1.6}
+.credit-inline .en{animation:creditEn 16s linear infinite}
+.credit-inline .fa{animation:creditFa 16s linear infinite}
+@keyframes creditEn{0%,40%{opacity:1}50%,90%{opacity:0}100%{opacity:1}}
+@keyframes creditFa{0%,40%{opacity:0}50%,90%{opacity:1}100%{opacity:0}}
+
+/* کبوترها (بدون تغییر) */
+.pigeon{position:fixed;left:0;top:0;pointer-events:none;z-index:2147483647;width:28px;height:28px;opacity:0;transform:translate3d(0,0,0) scale(.9) rotate(0deg);transition:transform var(--dur,3s) cubic-bezier(.18,.72,.2,1),opacity var(--fade,2.2s) ease}
+
+/* مودال */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:2147483646}
+.modal.show{display:flex}
+.modal-content{background:#fff;border-radius:18px;padding:28px;max-width:520px;width:92%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35);position:relative;overflow:hidden}
+.thank-decor::before,.thank-decor::after{content:"";position:absolute;pointer-events:none;opacity:.5;filter:drop-shadow(0 4px 8px rgba(0,0,0,.18));background-repeat:no-repeat;background-size:contain;animation:floaty 5s ease-in-out infinite;z-index:0}
+.thank-decor::before{right:-36px;bottom:-36px;width:190px;height:190px;background-image:url('images/decorations/narges1.png')}
+.thank-decor::after {top:-36px;left:-36px;width:180px;height:180px;background-image:url('images/decorations/narges2.png');animation-delay:1s}
+.thank-decor > *{position:relative;z-index:1}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* ساخته شده توسط مهدی باغبانپور بروجنی */
