@@ -204,17 +204,4 @@ body.night-mode{--day-opacity:0}
   100%{opacity:0}
 }
 
-/* ——— انیمیشن پرواز کبوترها ——— */
-.pigeon{
-  position:fixed; left:0; top:0;
-  pointer-events:none;
-  z-index:2147483647;           /* بالاترین لایه */
-  width:28px; height:28px;
-  opacity:0;
-  transform:translate3d(0,0,0) scale(.9) rotate(0deg);
-  transition:
-    transform var(--dur,3s) cubic-bezier(.18,.72,.2,1),
-    opacity   var(--fade,0.8s) ease;
-}
-
 /* ساخته شده توسط مهدی باغبانپور بروجنی */
