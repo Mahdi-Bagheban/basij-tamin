@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ——— کلاس پرواز آرام کبوترها (آرام، پراکنده، بدون سقوط) ———
   class PigeonGlide {
     constructor(opts = {}) {
-      this.urls     = opts.urls     || ['images/decorations/pigeon1.png','images/decorations/pigeon2.png'];
+      this.urls     = opts.urls     || ['images/decorations/pigeon1.webp','images/decorations/pigeon2.webp'];
       this.count    = 14;
       this.size     = opts.size     ?? 28;
       this.duration = opts.duration ?? 3000;

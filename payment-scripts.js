@@ -187,12 +187,12 @@ const NIAT_CARDS_RAW = [
     let el=bouquet.querySelector(`.flower[data-key="${CSS.escape(key)}"]`);
     if(el) return el;
     el=document.createElement('img'); el.className='flower'; el.setAttribute('data-key',key);
-    el.src='images/decorations/narges3.png'; el.alt='';
+    el.src='images/decorations/narges3.webp'; el.alt='';
     bouquet.insertBefore(el, bouquet.firstChild);
     return el;
   }
   function flyFlowerFromRowToBouquet(row,onDone){
-    const fly=document.createElement('img'); fly.src='images/decorations/narges3.png'; fly.alt='';
+    const fly=document.createElement('img'); fly.src='images/decorations/narges3.webp'; fly.alt='';
     fly.style.cssText='position:fixed;width:42px;height:42px;pointer-events:none;z-index:2147483646;opacity:0;';
     const r=row.getBoundingClientRect(); const startX=r.left+r.width*0.18, startY=r.top+r.height*0.12;
     fly.style.left=startX+'px'; fly.style.top=startY+'px'; document.body.appendChild(fly);
@@ -411,6 +411,16 @@ const NIAT_CARDS_RAW = [
     const custom=document.createElement('input'); custom.type='text'; custom.inputMode='numeric'; custom.className='custom-amount'; custom.placeholder='مبلغ دلخواه (تومان)';
     customWrap.appendChild(custom); customHolder.appendChild(customWrap);
 
+    const syncCustomSize=()=>{
+      const h1=intentTrigger.getBoundingClientRect().height||56;
+      const h2=amountTrigger.getBoundingClientRect().height||56;
+      const avg=Math.round((h1+h2)/2);
+      const clamped=Math.max(40, Math.min(avg, 72));
+      custom.style.height=clamped+'px';
+    };
+    const ro=new ResizeObserver(syncCustomSize);
+    ro.observe(intentTrigger); ro.observe(amountTrigger);
+
     function setAmountsEnabled(enabled){
       amountSel.disabled=!enabled; custom.disabled=!enabled;
       if(!enabled){ amountSel.value=''; custom.value=''; row.classList.remove('custom-visible'); amountTrigger.textContent='مبلغ را انتخاب کنید'; }
@@ -421,6 +431,7 @@ const NIAT_CARDS_RAW = [
       const isCustom = amountSel.value==='custom';
       row.classList.toggle('custom-visible', isCustom);
       if(isCustom){ custom.value=''; custom.focus(); } else if(amountSel.value){ upsertFlowerForRow(row); }
+      if(isCustom) syncCustomSize();
       updateTotalAndTitle(); updateScrollMode();
     }
     function maybeFromCustom(){
@@ -475,6 +486,45 @@ const NIAT_CARDS_RAW = [
   updateScrollMode();
   window.addEventListener('resize', debounce(()=>{ positionBouquet(); layoutBouquet(); updateScrollMode(); },150));
 
+  const ta=document.getElementById('donation-notes');
+  const count=document.getElementById('notes-inline-count');
+  if(ta && count){
+    const nf=new Intl.NumberFormat('fa-IR');
+    const max=ta.maxLength||313;
+    const update=()=>{
+      if(ta.value.length>max){ ta.value = ta.value.slice(0,max); }
+      const len=Math.min(ta.value.length,max);
+      count.textContent = nf.format(len) + '/' + nf.format(max);
+      count.classList.toggle('warn', len>=300);
+      count.classList.remove('bump'); void count.offsetWidth; count.classList.add('bump');
+      ta.style.height='auto';
+      ta.style.height=Math.max(ta.scrollHeight,96)+'px';
+    };
+    ta.addEventListener('beforeinput',(e)=>{
+      const sel=ta.selectionEnd - ta.selectionStart;
+      const inserting=/insert/i.test(e.inputType);
+      if(inserting && (ta.value.length - sel)>=max) e.preventDefault();
+    });
+    ta.addEventListener('input',update);
+    ta.addEventListener('focus',update);
+    update();
+  }
+
+  const trust=document.querySelector('.trust-footer');
+  if(payBtn && trust){
+    const setHalfGap=()=>{
+      trust.style.marginTop='';
+      const orig=parseFloat(getComputedStyle(trust).marginTop)||0;
+      const pb=payBtn.getBoundingClientRect().bottom;
+      const tt=trust.getBoundingClientRect().top;
+      const gap=Math.max(0, tt - pb);
+      const delta=gap - gap/2;
+      trust.style.marginTop=Math.max(0, orig - delta)+'px';
+    };
+    setHalfGap();
+    window.addEventListener('resize', debounce(setHalfGap, 150));
+  }
+
   // ارسال
   form.addEventListener('submit', e=>{
     e.preventDefault();
@@ -513,7 +563,7 @@ const NIAT_CARDS_RAW = [
   // کلاس پرواز آرام کبوترها
   class PigeonGlide {
     constructor(opts = {}) {
-      this.urls     = opts.urls     || ['images/decorations/pigeon1.png','images/decorations/pigeon2.png'];
+      this.urls     = opts.urls     || ['images/decorations/pigeon1.webp','images/decorations/pigeon2.webp'];
       this.count    = 14;
       this.size     = opts.size     ?? 28;
       this.duration = opts.duration ?? 3000;

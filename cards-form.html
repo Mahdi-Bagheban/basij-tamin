@@ -5,17 +5,20 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <!-- عنوان و نسخه صفحه کارت‌ها -->
-  <title>درگاه پرداخت گروه جهادی - نیات خیر (6.7.4)</title>
+  <title>درگاه پرداخت گروه جهادی - نیات خیر (6.7.5)</title>
 
   <!-- آیکن و استایل صفحه کارت‌ها -->
   <!-- کارکرد: بارگذاری آیکن و فایل CSS اختصاصی کارت‌ها -->
-  <link rel="icon" href="images/logo/icon.png" type="image/png" />
+  <link rel="icon" href="images/logo/icon.webp" type="image/webp" />
   <link rel="stylesheet" href="cards-styles.css" />
 
   <!-- اسکریپت تحلیل -->
   <!-- کارکرد: بارگذاری Clarity برای ردیابی تعاملات - بدون تغییر منطقی -->
   <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
+        var h=(l.location&&l.location.hostname)||c.location.hostname;
+        var isLocal=(c.location.protocol!=='https:')||/^(localhost|127\.0\.0\.1)$/i.test(h);
+        if(isLocal){ c[a]=c[a]||function(){}; return; }
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
@@ -44,8 +47,8 @@
     <button id="gateway-trigger" class="title-button" aria-controls="gateway-panel" aria-expanded="false">
       <div class="title-frame">
         <picture class="title-picture">
-          <source srcset="images/logo/cards-page-title-mobile.png" media="(max-width:650px)" />
-          <img src="images/logo/cards-page-title-desktop.png" alt="درگاه پرداخت گروه جهادی بسیج شهدای سازمان تامین اجتماعی" />
+          <source srcset="images/logo/cards-page-title-mobile.webp" media="(max-width:650px)" />
+          <img src="images/logo/cards-page-title-desktop.webp" alt="درگاه پرداخت گروه جهادی بسیج شهدای سازمان تامین اجتماعی" />
         </picture>
       </div>
     </button>
@@ -111,7 +114,7 @@
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
           <article class="card" data-url="payment-form.html?cause=قلک_بیمه">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-01.jpg" alt="قلک بیمه" onerror="this.onerror=null;this.src='images/cards/fallback.jpg';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-01.webp" alt="قلک بیمه" onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
             <div class="card-overlay"><div class="card-title">قلک بیمه</div></div>
           </article>
         </div>
@@ -138,7 +141,7 @@
             {"title":"دارو","url":"payment-form.html?cause=نذر_درمانی_دارو"}
           ]'>
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-02.jpg" alt="نذر درمانی" onerror="this.onerror=null;this.src='images/cards/fallback.jpg';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-02.webp" alt="نذر درمانی" onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
             <div class="card-overlay"><div class="card-title">نذر درمانی</div></div>
           </article>
         </div>
@@ -153,7 +156,7 @@
             {"title":"ساخت همراه‌سرا","url":"payment-form.html?cause=نذر_سازندگی_ساخت_همراه‌سرا"}
           ]'>
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-03.jpg" alt="نذر سازندگی" onerror="this.onerror=null;this.src='images/cards/fallback.jpg';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-03.webp" alt="نذر سازندگی" onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
             <div class="card-overlay"><div class="card-title">نذر سازندگی</div></div>
           </article>
         </div>
@@ -164,7 +167,7 @@
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
           <article class="card" data-url="payment-form.html?cause=نذر_نان">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-04.jpg" alt="نذر نان" onerror="this.onerror=null;this.src='images/cards/fallback.jpg';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-04.webp" alt="نذر نان" onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
             <div class="card-overlay"><div class="card-title">نذر نان</div></div>
           </article>
         </div>
@@ -179,7 +182,7 @@
             {"title":"چایخانه حضرت رضا (ع)","url":"payment-form.html?cause=مواکب_شهدای_بسیج_چایخانه_حضرت_رضا"}
           ]'>
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-05.jpg" alt="مواکب شهدای بسیج" onerror="this.onerror=null;this.src='images/cards/fallback.jpg';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-05.webp" alt="مواکب شهدای بسیج" onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
             <div class="card-overlay"><div class="card-title">مواکب شهدای بسیج</div></div>
           </article>
         </div>
@@ -190,7 +193,7 @@
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
           <article class="card" data-url="payment-form.html?cause=نذر_قربانی">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-06.jpg" alt="نذر قربانی" onerror="this.onerror=null;this.src='images/cards/fallback.jpg';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-06.webp" alt="نذر قربانی" onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
             <div class="card-overlay"><div class="card-title">نذر قربانی</div></div>
           </article>
         </div>
@@ -206,7 +209,7 @@
             {"title":"کمک به جبهه مقاومت","url":"payment-form.html?cause=کمک_معیشتی_و_نذر_مؤمنانه_کمک_به_جبهه_مقاومت"}
           ]'>
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-07.jpg" alt="کمک معیشتی و نذر مؤمنانه" onerror="this.onerror=null;this.src='images/cards/fallback.jpg';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-07.webp" alt="کمک معیشتی و نذر مؤمنانه" onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
             <div class="card-overlay"><div class="card-title">کمک معیشتی و نذر مؤمنانه</div></div>
           </article>
         </div>
@@ -234,7 +237,7 @@
             {"title":"صدقه","url":"payment-form.html?cause=وجوهات_شرعی_صدقه"}
           ]'>
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-08.jpg" alt="وجوهات شرعی" onerror="this.onerror=null;this.src='images/cards/fallback.jpg';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-08.webp" alt="وجوهات شرعی" onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
             <div class="card-overlay"><div class="card-title">وجوهات شرعی</div></div>
           </article>
         </div>
@@ -245,7 +248,7 @@
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
           <article class="card" data-url="payment-form.html?cause=آزادی_زندانیان_غیرعمد">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-09.jpg" alt="آزادی زندانیان غیرعمد" onerror="this.onerror=null;this.src='images/cards/fallback.jpg';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-09.webp" alt="آزادی زندانیان غیرعمد" onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
             <div class="card-overlay"><div class="card-title">آزادی زندانیان غیرعمد</div></div>
           </article>
         </div>
@@ -256,7 +259,7 @@
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
           <article class="card" data-url="payment-form.html?cause=نذر_عام">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-10.jpg" alt="نذر عام" onerror="this.onerror=null;this.src='images/cards/fallback.jpg';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-10.webp" alt="نذر عام" onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
             <div class="card-overlay"><div class="card-title">نذر عام</div></div>
           </article>
         </div>

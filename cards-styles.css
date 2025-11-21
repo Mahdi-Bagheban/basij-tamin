@@ -39,7 +39,7 @@ body.night-mode{--day-opacity:0}
 /* لایه پس‌زمینه ثابت زیر کارت‌ها (overlay) */
 .cards-bg-fixed{
   position:fixed; left:0; right:0; top:var(--cards-bg-top); bottom:var(--cards-bg-bottom);
-  background-image:url('images/decorations/background.png');
+  background-image:url('images/decorations/background.webp');
   background-repeat:no-repeat;
   background-position:center center;
   background-size:auto 100%;        /* ارتفاع کامل، برش فقط از طرفین */
@@ -114,9 +114,9 @@ body.tease-active .title-frame{
 /* کارت و نرگس‌ها */
 .card-wrap{position:relative;display:flex;align-items:center;justify-content:center;z-index:1}
 .card-deco.narges{position:absolute;z-index:1;pointer-events:none;opacity:0;transform:rotate(8deg) scale(.7);transition:transform .35s ease,opacity .35s ease,top .35s,left .35s,right .35s,bottom .35s, filter .35s}
-.narges-tl{width:88px;height:88px;background:url('images/decorations/narges1.png') no-repeat center/contain;top:-18px;left:-16px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.2))}
+ .narges-tl{width:88px;height:88px;background:url('images/decorations/narges1.webp') no-repeat center/contain;top:-18px;left:-16px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.2))}
 .card-wrap.card-ready .narges-tl{opacity:.98;transform:rotate(0deg) scale(1)}
-.narges-br{width:66px;height:66px;background:url('images/decorations/narges2.png') no-repeat center/contain;bottom:-18px;right:-16px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.2))}
+ .narges-br{width:66px;height:66px;background:url('images/decorations/narges2.webp') no-repeat center/contain;bottom:-18px;right:-16px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.2))}
 .card-wrap.card-ready .narges-br{opacity:.98;transform:rotate(0deg) scale(.86)}
 .card-wrap:hover .narges-tl{top:-36px;left:-24px;transform:rotate(-6deg) scale(1.2)}
 .card-wrap:hover .narges-br{bottom:-26px;right:-22px;transform:rotate(6deg) scale(1.2)}
