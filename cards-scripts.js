@@ -285,59 +285,6 @@ document.addEventListener('DOMContentLoaded', () => {
   bindTooltips();
 
   // ——— کلاس پرواز آرام کبوترها (آرام، پراکنده، بدون سقوط) ———
-  class PigeonGlide {
-    constructor(opts = {}) {
-      this.urls     = opts.urls     || ['images/decorations/pigeon1.webp','images/decorations/pigeon2.webp'];
-      this.count    = 14;
-      this.size     = opts.size     ?? 28;
-      this.duration = opts.duration ?? 3000;
-      this.rise     = opts.rise     ?? 240;
-      this.spreadUp = opts.spreadUp ?? 1.05;
-      this.drift    = opts.drift    ?? 150;
-      this.wobbleAmp= opts.wobbleAmp?? 10;
-      this.wobbleHz = opts.wobbleHz ?? 1.1;
-      this.maxTilt  = opts.maxTilt  ?? 16;
-    }
-    angleForIndex(i){
-      const u = (i/(this.count-1) - 0.5) * 2;
-      const base = (Math.PI/2) + u * this.spreadUp;
-      const jitter = (Math.random()-0.5) * 0.12;
-      return base + jitter;
-    }
-    easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
-    burstAt(x, y){
-      for (let i=0; i<this.count; i++){
-        const img = new Image();
-        img.src = this.urls[i % this.urls.length];
-        img.alt = '';
-        img.style.cssText = `position:fixed;left:0;top:0;width:${this.size}px;height:${this.size}px;pointer-events:none;z-index:9999;will-change:transform,opacity;`;
-        document.body.appendChild(img);
-
-        const ang   = this.angleForIndex(i);
-        const phase = Math.random()*Math.PI*2;
-        const drift = Math.cos(ang) * this.drift * (0.8 + Math.random()*0.4);
-        const sx = x - this.size/2, sy = y - this.size/2;
-        const dur = this.duration * (0.92 + Math.random()*0.2);
-        const delay = i*50 + Math.random()*80;
-
-        setTimeout(() => {
-          const start = performance.now();
-          const step = (now) => {
-            const t = Math.min(1, (now - start) / dur);
-            const e = this.easeOutCubic(t);
-            const up   = -this.rise * e;
-            const side = drift * e + Math.sin((t*this.wobbleHz*2*Math.PI)+phase) * this.wobbleAmp * (1 - t);
-            const rot  = (this.maxTilt * Math.sin((t*2*Math.PI*0.8)+phase)).toFixed(1);
-            img.style.transform = `translate(${sx + side}px, ${sy + up}px) rotate(${rot}deg)`;
-            img.style.opacity   = String(1 - t);
-            if (t < 1) requestAnimationFrame(step); else img.remove();
-          };
-          requestAnimationFrame(step);
-        }, delay);
-      }
-    }
-    burstAtElement(el){ const b=el.getBoundingClientRect(); this.burstAt(b.left + b.width/2, b.top + b.height/2); }
-  }
   const pigeons = new PigeonGlide();
 });
 

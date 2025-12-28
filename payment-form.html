@@ -1,23 +1,28 @@
 <!-- به نام خداوند بخشنده مهربان -->
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>درگاه ثبت خیر</title>
   <link rel="stylesheet" href="payment-styles.css" />
   <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-      var h=(l.location&&l.location.hostname)||c.location.hostname;
-      var isLocal=(c.location.protocol!=='https:')||/^(localhost|127\.0\.0\.1)$/i.test(h);
-      if(isLocal){ c[a]=c[a]||function(){}; return; }
-      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    (function (c, l, a, r, i, t, y) {
+      var h = (l.location && l.location.hostname) || c.location.hostname;
+      var isLocal = (c.location.protocol !== 'https:') || /^(localhost|127\.0\.0\.1)$/i.test(h);
+      if (isLocal) { c[a] = c[a] || function () { }; return; }
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+      t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
+      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
     })(window, document, "clarity", "script", "ta5vnt8v6q");
   </script>
 </head>
+
 <body>
+  <!-- لینک پرش به محتوا برای دسترس‌پذیری -->
+  <a href="#payment-form" class="skip-link" aria-label="پرش به فرم پرداخت">پرش به فرم</a>
+
   <div class="pay-shell">
     <header class="pay-header">
       <h1 id="page-title">ثبت نیت خیر</h1>
@@ -29,7 +34,8 @@
           <div class="input-group">
             <label for="fullname">نام و نام خانوادگی</label>
             <div class="field-wrapper">
-              <input id="fullname" name="fullname" type="text" placeholder="نام و نام خانوادگی" autocomplete="name" required />
+              <input id="fullname" name="fullname" type="text" placeholder="نام و نام خانوادگی" autocomplete="name"
+                required />
             </div>
             <small class="error"></small>
           </div>
@@ -37,7 +43,8 @@
           <div class="input-group">
             <label for="mobile">شماره موبایل</label>
             <div class="field-wrapper">
-              <input id="mobile" name="mobile" type="tel" placeholder="09xxxxxxxxx" inputmode="numeric" autocomplete="tel" required />
+              <input id="mobile" name="mobile" type="tel" placeholder="09xxxxxxxxx" inputmode="numeric"
+                autocomplete="tel" required />
             </div>
             <small class="error"></small>
           </div>
@@ -73,12 +80,9 @@
           <div class="input-group notes-block">
             <label for="donation-notes"></label>
             <div class="field-wrapper">
-              <textarea id="donation-notes"
-                        name="donation-notes"
-                        class="notes-textarea"
-                        placeholder="افزودن توضیحات اختیاری باعث هدایت دقیق نیت خیر شما می‌شود؛"
-                        maxlength="313"
-                        aria-label="توضیحات اختیاری"></textarea>
+              <textarea id="donation-notes" name="donation-notes" class="notes-textarea"
+                placeholder="افزودن توضیحات اختیاری باعث هدایت دقیق نیت خیر شما می‌شود؛" maxlength="313"
+                aria-label="توضیحات اختیاری"></textarea>
               <span id="notes-inline-count" class="notes-counter pos-bl">۰/۳۱۳</span>
             </div>
           </div>
@@ -123,7 +127,10 @@
     </div>
   </div>
 
+  <script src="src/js/utils.js"></script>
+  <script src="src/js/data.js"></script>
   <script src="payment-scripts.js"></script>
 </body>
+
 </html>
 <!-- ساخته شده توسط مهدی باغبانپور بروجنی -->
