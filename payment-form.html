@@ -5,18 +5,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>درگاه ثبت خیر</title>
+  <title>درگاه ثبت خیر - بسیج تأمین اجتماعی</title>
+
+  <!-- متا تگ‌های SEO -->
+  <meta name="description" content="فرم ثبت پرداخت نیت خیر - درگاه گروه جهادی بسیج شهدای سازمان تأمین اجتماعی">
+  <meta name="author" content="گروه جهادی بسیج سازمان تأمین اجتماعی">
+  <meta name="keywords" content="پرداخت آنلاین, نیت خیر, بسیج, تأمین اجتماعی, خیریه">
+  <meta property="og:title" content="ثبت نیت خیر - درگاه پرداخت بسیج">
+  <meta property="og:description" content="فرم ثبت پرداخت نیت خیر به صورت آنلاین">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fa_IR">
   <link rel="stylesheet" href="payment-styles.css" />
-  <script type="text/javascript">
-    (function (c, l, a, r, i, t, y) {
-      var h = (l.location && l.location.hostname) || c.location.hostname;
-      var isLocal = (c.location.protocol !== 'https:') || /^(localhost|127\.0\.0\.1)$/i.test(h);
-      if (isLocal) { c[a] = c[a] || function () { }; return; }
-      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
-      t = l.createElement(r); t.async = 1; t.src = "https://www.clarity.ms/tag/" + i;
-      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
-    })(window, document, "clarity", "script", "ta5vnt8v6q");
-  </script>
+  <!-- اسکریپت تحلیل (فایل مشترک) -->
+  <script src="src/js/clarity.js"></script>
 </head>
 
 <body>
@@ -81,7 +82,7 @@
             <label for="donation-notes"></label>
             <div class="field-wrapper">
               <textarea id="donation-notes" name="donation-notes" class="notes-textarea"
-                placeholder="افزودن توضیحات اختیاری باعث هدایت دقیق نیت خیر شما می‌شود؛" maxlength="313"
+                placeholder="توضیحات اختیاری (حداکثر ۳۱۳ حرف) - باعث هدایت دقیق‌تر نیت خیر شما می‌شود" maxlength="313"
                 aria-label="توضیحات اختیاری"></textarea>
               <span id="notes-inline-count" class="notes-counter pos-bl">۰/۳۱۳</span>
             </div>

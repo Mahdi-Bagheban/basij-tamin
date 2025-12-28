@@ -1,11 +1,18 @@
 <!-- به نام خداوند بخشنده مهربان -->
 <!doctype html>
-<html lang="fa" dir="rtl" data-version="6.7.5">
+<html lang="fa" dir="rtl" data-version="6.7.8">
 <head>
-  <!-- Version 6.7.5 -->
+  <!-- Version 6.7.8 -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="version" content="6.7.5">
+  <meta name="version" content="6.7.8">
+  <meta name="description" content="درگاه پرداخت آنلاین گروه جهادی بسیج شهدای سازمان تأمین اجتماعی - کمک به نیازمندان، نذورات شرعی و امور خیریه">
+  <meta name="author" content="گروه جهادی بسیج سازمان تأمین اجتماعی">
+  <meta name="keywords" content="پرداخت آنلاین, بسیج, تأمین اجتماعی, نذر, صدقه, خیریه, کمک معیشتی">
+  <meta property="og:title" content="درگاه پرداخت گروه جهادی بسیج">
+  <meta property="og:description" content="پرداخت آنلاین به نیات خیر - بسیج سازمان تأمین اجتماعی">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="fa_IR">
   <title>درگاه پرداخت گروه جهادی بسیج شهدای سازمان تامین اجتماعی</title>
 
   <!-- dotLottie player (خود-میزبان؛ کل محتوای dist در assets/vendor/ باشد) -->
@@ -31,30 +38,8 @@
   </script>
 
   <!-- فونت وزیر (لوکال از دایرکتوری پروژه) -->
-  <!-- کارکرد: تعریف فونت‌های woff2 و اعمال آن فقط در صفحه index -->
-  <style>
-    /* به نام خداوند بخشنده مهربان — بلوک فونت‌ها */
-    @font-face{
-      font-family:'Vazirmatn';
-      src:url('fonts/Vazirmatn-Regular.woff2') format('woff2');
-      font-weight:400; font-style:normal; font-display:swap;
-    }
-    @font-face{
-      font-family:'Vazirmatn';
-      src:url('fonts/Vazirmatn-Medium.woff2') format('woff2');
-      font-weight:500; font-style:normal; font-display:swap;
-    }
-    @font-face{
-      font-family:'Vazirmatn';
-      src:url('fonts/Vazirmatn-SemiBold.woff2') format('woff2');
-      font-weight:600; font-style:normal; font-display:swap;
-    }
-    @font-face{
-      font-family:'Vazirmatn';
-      src:url('fonts/Vazirmatn-Bold.woff2') format('woff2');
-      font-weight:700; font-style:normal; font-display:swap;
-    }
-  </style>
+  <!-- کارکرد: استفاده از فایل مشترک فونت‌ها -->
+  <link rel="stylesheet" href="src/css/fonts.css">
 
   <!-- استایل‌های صفحه (حفظ ساختار و منطق فعلی؛ فقط تغییر در فونت) -->
   <!-- کارکرد: لایه‌بندی، پس‌زمینه، نوار شیشه‌ای، نسخه و فوتر -->
@@ -232,18 +217,9 @@
     }
   </style>
 
-  <!-- اسکریپت تحلیل (حفظ‌شده طبق نسخه فعلی) -->
-  <!-- کارکرد: بارگذاری Clarity برای ردیابی تعاملات - بدون تغییر -->
-  <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        var h=(l.location&&l.location.hostname)||c.location.hostname;
-        var isLocal=(c.location.protocol!=='https:')||/^(localhost|127\.0\.0\.1)$/i.test(h);
-        if(isLocal){ c[a]=c[a]||function(){}; return; }
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "ta5vnt8v6q");
-  </script>
+  <!-- اسکریپت تحلیل (فایل مشترک) -->
+  <!-- کارکرد: بارگذاری Clarity برای ردیابی تعاملات -->
+  <script src="src/js/clarity.js"></script>
 </head>
 <body>
   <div class="page" aria-label="درگاه پرداخت">
@@ -271,7 +247,7 @@
       </div>
 
       <!-- نسخه زیر لودینگ و بالای کپی‌رایت -->
-      <div class="version" aria-label="نسخه">نسخه 6.7.5</div>
+      <div class="version" aria-label="نسخه">نسخه 6.7.8</div>
     </section>
   </div>
 
