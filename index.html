@@ -19,7 +19,9 @@
   <meta property="og:locale" content="fa_IR">
   <meta property="og:site_name" content="درگاه پرداخت گروه جهادی بسیج">
   <meta property="og:image" content="__SITE_ORIGIN__/images/logo/cards-page-title-desktop.webp">
+  <meta property="og:image:alt" content="درگاه پرداخت گروه جهادی بسیج شهدای سازمان تأمین اجتماعی">
   <meta property="og:url" content="__SITE_ORIGIN__/">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="__SITE_ORIGIN__/">
   <link rel="icon" href="images/logo/icon.webp" type="image/webp">
   <!-- Preconnect for third-party analytics origin to reduce handshake latency -->
@@ -38,6 +40,9 @@
 
   <!-- فونت وزیر (لوکال از دایرکتوری پروژه) -->
   <!-- کارکرد: استفاده از فایل مشترک فونت‌ها -->
+  <!-- پیش‌بارگذاری فونت اصلی: زنجیرهٔ کشف HTML ← fonts.css ← woff2 را کوتاه و LCP را زودتر می‌کند -->
+  <!-- Preload the primary font to shorten the HTML -> fonts.css -> woff2 discovery chain (LCP) -->
+  <link rel="preload" href="fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="src/css/fonts.css">
 
   <!-- استایل‌های صفحه (حفظ ساختار و منطق فعلی؛ فقط تغییر در فونت) -->
@@ -243,6 +248,35 @@
       .glass-bar .fill::after{ display:none; }
     }
   </style>
+
+  <!-- دادهٔ ساخت‌یافته برای موتورهای جست‌وجو (Organization + WebSite) -->
+  <!-- Structured data for search engines; ld+json is parsed as data, never executed as script -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "__SITE_ORIGIN__/#organization",
+        "name": "گروه جهادی بسیج شهدای سازمان تأمین اجتماعی",
+        "alternateName": "Basij of the Social Security Organization",
+        "url": "__SITE_ORIGIN__/",
+        "logo": "__SITE_ORIGIN__/images/logo/icon.webp",
+        "image": "__SITE_ORIGIN__/images/logo/cards-page-title-desktop.webp",
+        "description": "سامانه انتخاب و بررسی نیات خیر گروه جهادی بسیج شهدای سازمان تأمین اجتماعی",
+        "areaServed": "IR"
+      },
+      {
+        "@type": "WebSite",
+        "@id": "__SITE_ORIGIN__/#website",
+        "name": "درگاه پرداخت گروه جهادی بسیج",
+        "url": "__SITE_ORIGIN__/",
+        "inLanguage": "fa-IR",
+        "publisher": { "@id": "__SITE_ORIGIN__/#organization" }
+      }
+    ]
+  }
+  </script>
 
   <!-- اسکریپت تحلیل (فایل مشترک) - به‌صورت غیرمسدودکننده -->
   <!-- کارکرد: بارگذاری Clarity برای ردیابی تعاملات بدون بلوک رندر -->

@@ -183,16 +183,26 @@ document.addEventListener('DOMContentLoaded', () => {
   function rovingFocus(panel) {
     const items = [...panel.querySelectorAll('.menu-item')];
     if (!items.length) return;
-    let idx = 0;
     items.forEach((it, i) => { it.tabIndex = i === 0 ? 0 : -1; });
-    const setActive = i => { items[idx].tabIndex = -1; idx = (i + items.length) % items.length; items[idx].tabIndex = 0; items[idx].focus(); };
-    panel.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowDown') { e.preventDefault(); setActive(idx + 1); }
-      else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(idx - 1); }
-      else if (e.key === 'Home') { e.preventDefault(); setActive(0); }
-      else if (e.key === 'End') { e.preventDefault(); setActive(items.length - 1); }
-      else if (e.key === 'Escape') { e.preventDefault(); const parentBtn = panel.previousElementSibling; panel.classList.remove('open'); panel.setAttribute('aria-hidden', 'true'); parentBtn?.setAttribute('aria-expanded', 'false'); parentBtn?.focus(); }
-    });
+    // The roving index lives on the node: this runs on every open, so it must survive re-entry.
+    panel._rovingIndex = 0;
+    const setActive = i => {
+      items[panel._rovingIndex].tabIndex = -1;
+      panel._rovingIndex = (i + items.length) % items.length;
+      items[panel._rovingIndex].tabIndex = 0;
+      items[panel._rovingIndex].focus();
+    };
+    // Bind once per panel; re-binding on each open would stack handlers and multiply every keypress.
+    if (!panel._rovingBound) {
+      panel._rovingBound = true;
+      panel.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') { e.preventDefault(); setActive(panel._rovingIndex + 1); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(panel._rovingIndex - 1); }
+        else if (e.key === 'Home') { e.preventDefault(); setActive(0); }
+        else if (e.key === 'End') { e.preventDefault(); setActive(items.length - 1); }
+        else if (e.key === 'Escape') { e.preventDefault(); const parentBtn = panel.previousElementSibling; panel.classList.remove('open'); panel.setAttribute('aria-hidden', 'true'); parentBtn?.setAttribute('aria-expanded', 'false'); parentBtn?.focus(); }
+      });
+    }
     items[0].focus();
   }
   function smartPlace(panel, trigger) {
@@ -249,12 +259,14 @@ document.addEventListener('DOMContentLoaded', () => {
       smartPlace(panel, trigger); setTimeout(() => rovingFocus(panel), 0);
       const closer = (ev) => { if (!panel.contains(ev.target) && ev.target !== trigger) { closePanel(trigger, panel, true); document.removeEventListener('pointerdown', closer, true); } };
       document.addEventListener('pointerdown', closer, true);
-      panel.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); closePanel(trigger, panel, true); } });
     }
     function closePanel(trigger, panel, returnFocus) {
       panel.classList.remove('open'); panel.setAttribute('aria-hidden', 'true'); trigger.setAttribute('aria-expanded', 'false');
       if (returnFocus) trigger.focus();
     }
+
+    // Escape is bound once at creation; binding it inside openPanel would stack a new listener per open.
+    intentPanel.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); closePanel(intentTrigger, intentPanel, true); } });
 
     intentTrigger.addEventListener('click', (e) => { e.stopPropagation(); intentPanel.classList.contains('open') ? closePanel(intentTrigger, intentPanel, true) : openPanel(intentTrigger, intentPanel); });
     intentTrigger.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') { e.preventDefault(); openPanel(intentTrigger, intentPanel); } });
@@ -293,8 +305,9 @@ document.addEventListener('DOMContentLoaded', () => {
       smartPlace(amountPanel, amountTrigger); setTimeout(() => rovingFocus(amountPanel), 0);
       const closer = (ev) => { if (!amountPanel.contains(ev.target) && ev.target !== amountTrigger) { closePanel(amountTrigger, amountPanel, true); document.removeEventListener('pointerdown', closer, true); } };
       document.addEventListener('pointerdown', closer, true);
-      amountPanel.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); closePanel(amountTrigger, amountPanel, true); } });
     }
+    // Escape is bound once at creation; binding it inside openAmount would stack a new listener per open.
+    amountPanel.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); closePanel(amountTrigger, amountPanel, true); } });
     amountTrigger.addEventListener('click', (e) => { e.stopPropagation(); amountPanel.classList.contains('open') ? closePanel(amountTrigger, amountPanel, true) : openAmount(); });
     amountTrigger.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') { e.preventDefault(); openAmount(); } });
 

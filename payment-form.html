@@ -19,6 +19,9 @@
   <meta property="og:description" content="فرم انتخاب و بررسی نیت خیر">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fa_IR">
+  <meta property="og:site_name" content="درگاه پرداخت گروه جهادی بسیج">
+  <meta property="og:image:alt" content="درگاه پرداخت گروه جهادی بسیج شهدای سازمان تأمین اجتماعی">
+  <meta name="twitter:card" content="summary_large_image">
 
   <!-- پیوندهای سئو و آیکن - نشانی مبدأ در زمان دیپلوی به‌صورت خودکار جایگزین می‌شود -->
   <!-- SEO links; the __SITE_ORIGIN__ token is replaced with the real origin at deploy time -->
@@ -26,8 +29,13 @@
   <meta property="og:image" content="__SITE_ORIGIN__/images/logo/cards-page-title-desktop.webp" />
   <meta property="og:url" content="__SITE_ORIGIN__/payment-form.html" />
   <link rel="icon" href="images/logo/icon.webp" type="image/webp" />
+  <!-- پیش‌بارگذاری فونت اصلی: زنجیرهٔ کشف HTML ← fonts.css ← woff2 را کوتاه و LCP را زودتر می‌کند -->
+  <!-- Preload the primary font to shorten the HTML -> fonts.css -> woff2 discovery chain (LCP) -->
+  <link rel="preload" href="fonts/Vazirmatn-Regular.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="src/css/fonts.css" />
   <link rel="stylesheet" href="payment-styles.css" />
+  <!-- Preconnect to the analytics origin to remove handshake latency from the critical path -->
+  <link rel="preconnect" href="https://www.clarity.ms" crossorigin />
   <!-- اسکریپت تحلیل (فایل مشترک) - به‌صورت غیرمسدودکننده -->
   <!-- Analytics shared script, deferred to avoid render blocking -->
   <script src="src/js/clarity.js" defer></script>
@@ -147,6 +155,7 @@
 
   <script src="src/js/utils.js"></script>
   <script src="src/js/data.js"></script>
+  <script src="src/js/data-niat.js"></script>
   <script src="payment-scripts.js"></script>
 </body>
 

@@ -226,8 +226,9 @@ Basij-Tamin/
 │       ├── utils.js           # توابع مشترک — shared utilities (safeStorage, normalizeMobile)
 │       ├── splash.js          # منطق صفحهٔ اسپلش — splash-page logic
 │       ├── dotlottie-fallback.js # فالبک پلیر با SRI — player fallback with SRI
-│       └── data.js            # داده‌های استان/نیت (منبع واحد نشانی‌های پرداخت)
-│                              # provinces & niat data (single source of payment URLs)
+│       ├── data.js            # داده‌های استان/شهر — province & city dataset
+│       └── data-niat.js       # داده‌های نیات (منبع واحد نشانی‌های پرداخت)
+│                              # niat data (single source of payment URLs)
 │
 ├── 🖼️ images/
 │   ├── cards/                 # تصاویر کارت‌ها — card images
@@ -268,7 +269,7 @@ Basij-Tamin/
 
 #### تغییر نیت‌ها
 ```javascript
-// در src/js/data.js
+// در src/js/data-niat.js
 const NIAT_CARDS_RAW = [
   {"title":"نیت جدید"},
   {"title":"نیت با زیرمنو","menu":[

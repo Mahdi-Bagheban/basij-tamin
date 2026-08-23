@@ -29,6 +29,7 @@
   skipLink?.addEventListener("click", () => { navigated = true; });
 
   const bar = document.querySelector(".glass-bar");
+  const loader = document.querySelector("section.loader");
   const start = performance.now();
   const DURATION = 2500; // ms — shortened splash for faster access to content
 
@@ -44,6 +45,8 @@
     bar?.style.setProperty("--p", (te * 100).toFixed(2) + "%");
 
     if (t < 1) requestAnimationFrame(raf);
+    // Release the busy state so assistive tech stops announcing "loading".
+    else loader?.setAttribute("aria-busy", "false");
   }
   if (bar) requestAnimationFrame(raf);
 

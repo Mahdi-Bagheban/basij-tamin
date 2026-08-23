@@ -1,7 +1,12 @@
 /* به نام خداوند بخشنده مهربان */
+/**
+ * دادهٔ جغرافیایی استان و شهر و توابع دسترسی به آن.
+ * ---
+ * Province/city geographic dataset and its accessor helpers.
+ */
 
 // ==========================================
-// داده‌ها (Data)
+// داده‌ها — جغرافیا (Geographic Data)
 // ==========================================
 
 /* ——— استان/شهر (منوی شهر وابسته به استان) ——— */
@@ -39,57 +44,12 @@ const PROVINCES_CITIES_RAW = {
     "یزد": ["یزد", "میبد", "اردکان", "بافق", "مهریز", "ابرکوه", "تفت", "زارچ", "اشکذر", "شاهدیه", "مروست", "خضرآباد", "حمیدیا", "ندوشن", "هرات"]
 };
 
-/* ——— نیت‌های خیر (منوی چندسطحی) ——— */
-const NIAT_CARDS_RAW = [
-    { "title": "قلک بیمه" },
-    {
-        "title": "نذر درمانی", "menu": [
-            { "title": "داروهای بیماران سرطانی و صعب العلاج" },
-            { "title": "کمک هزینه ناباروری" },
-            { "title": "هزینه درمان بیماران ناتوان مالی" },
-            {
-                "title": "تجهیزات درمان", "submenu": [
-                    { "title": "دستگاه دیالیز" }, { "title": "جراحی چشم" }, { "title": "اکو قلب" },
-                    { "title": "سونوگرافی" }, { "title": "سونوگرافی تخصصی" }, { "title": "ماموگرافی" },
-                    { "title": "تجهیزات آزمایشگاه بیوشیمی" }, { "title": "شمارشگر خون" }, { "title": "دستگاه گاز خون" },
-                    { "title": "لنز و تجهیزات چشم" }, { "title": "پروتزهای مفصل" }, { "title": "پروتز ستون فقرات" }
-                ]
-            }
-        ]
-    },
-    {
-        "title": "نذر سازندگی", "menu": [
-            { "title": "ساخت مراکز درمانی" }, { "title": "ساخت مراکز بیمه‌ای" }, { "title": "ساخت همراه‌سرا" }
-        ]
-    },
-    { "title": "نذر نان" },
-    {
-        "title": "مواکب شهدای بسیج", "menu": [
-            { "title": "موکب کربلا" }, { "title": "مواکب سراسر کشور" }, { "title": "چایخانه حضرت رضا (ع)" }
-        ]
-    },
-    { "title": "نذر قربانی" },
-    {
-        "title": "کمک معیشتی و نذر مؤمنانه", "menu": [
-            { "title": "نذر فرهنگی" }, { "title": "کمک به خرید جهیزیه" }, { "title": "کمک هزینه ازدواج" }, { "title": "کمک به جبهه مقاومت" }
-        ]
-    },
-    {
-        "title": "وجوهات شرعی", "menu": [
-            { "title": "خمس", "submenu": [{ "title": "خمس عام" }, { "title": "خمس سادات" }] },
-            { "title": "کفاره", "submenu": [{ "title": "کفاره عام" }, { "title": "کفاره سادات" }] },
-            { "title": "فطریه", "submenu": [{ "title": "فطریه عام" }, { "title": "فطریه سادات" }] },
-            { "title": "خیرات اموات" }, { "title": "ثلث مال" }, { "title": "رد مظالم" }, { "title": "صدقه" }
-        ]
-    },
-    { "title": "آزادی زندانیان غیرعمد" },
-    { "title": "نذر عام" }
-];
+// Shared Persian collator: constructing Intl.Collator is costly, so build it once.
+const COLL_FA = new Intl.Collator('fa', { sensitivity: 'base', numeric: true });
 
 // توابع پردازش (که از window.utils استفاده می‌کنند)
 function buildProvinceCities() {
     if (typeof PROVINCES_CITIES_RAW === 'undefined') return {};
-    const COLL_FA = new Intl.Collator('fa', { sensitivity: 'base', numeric: true });
     // فرض بر این است که toFaChars و uniq در window موجود است
     const out = {};
     for (const [p, list] of Object.entries(PROVINCES_CITIES_RAW)) {
@@ -102,43 +62,9 @@ function buildProvinceCities() {
     return window.deepFreeze(ordered);
 }
 
-function normalizeMenuTree(nodes = []) {
-    const walk = (arr = []) => arr.map(n => {
-        const title = window.toFaChars(n.title);
-        const node = { title };
-        if (Array.isArray(n.menu) && n.menu.length) node.menu = walk(n.menu);
-        if (Array.isArray(n.submenu) && n.submenu.length) node.submenu = walk(n.submenu);
-        return node;
-    });
-    return walk(nodes);
-}
-
-/**
- * اشتقاق خودکار نشانی پرداخت برای برگ‌ها — عنوان‌های مسیر با زیرخط به هم می‌چسبند -
- * Auto-derive payment URLs on leaf nodes; ancestor titles are joined with underscores.
- * @param {Array} nodes - درخت نیت‌ها / niat tree
- * @param {string[]} trail - عناوین مسیر تا این گره / ancestor title trail
- * @returns {Array} همان درخت با افزودن `url` به برگ‌ها / same tree, leaves gain `url`
- */
-function derivePaymentUrls(nodes = [], trail = []) {
-    return nodes.map(n => {
-        const path = trail.concat(n.title);
-        const children = n.menu || n.submenu;
-        if (Array.isArray(children) && children.length) {
-            const node = { title: n.title };
-            if (n.menu) node.menu = derivePaymentUrls(n.menu, path);
-            else node.submenu = derivePaymentUrls(n.submenu, path);
-            return node;
-        }
-        return { title: n.title, url: 'payment-form.html?cause=' + path.map(t => t.replace(/\s+/g, '_')).join('_') };
-    });
-}
-
 // Expose globals
 window.PROVINCES_CITIES_RAW = PROVINCES_CITIES_RAW;
-window.NIAT_CARDS_RAW = NIAT_CARDS_RAW;
 window.buildProvinceCities = buildProvinceCities;
-window.normalizeMenuTree = normalizeMenuTree;
 
 // Initialize
 // نکته: چون این فایل بعد از utils.js لود می‌شود، توابع window.toFaChars موجود هستند
@@ -146,11 +72,9 @@ try {
     window.PROVINCES_CITIES = buildProvinceCities();
     window.PROVINCE_LIST = Object.freeze(Object.keys(window.PROVINCES_CITIES));
     window.getCitiesOf = (provinceName) => {
-        const COLL_FA = new Intl.Collator('fa', { sensitivity: 'base', numeric: true });
         const key = window.PROVINCE_LIST.find(p => COLL_FA.compare(p, window.toFaChars(provinceName)) === 0);
         return key ? window.PROVINCES_CITIES[key] : [];
     };
-    window.NIAT_CARDS = window.deepFreeze(derivePaymentUrls(normalizeMenuTree(NIAT_CARDS_RAW)));
 } catch (e) {
     console.warn("Data initialization deferred (utils might not be ready)", e);
 }
