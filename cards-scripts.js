@@ -155,6 +155,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ——— منو/لینک کارت‌ها + افکت‌های موجود ———
+  // دریافت آیتم‌های یک کارت از منبع واحد داده -
+  // Resolve card menu items from the shared NIAT_CARDS data source (src/js/data.js)
+  function getCardMenuItems(card){
+    const i = Number(card.getAttribute('data-card'));
+    const entry = Array.isArray(window.NIAT_CARDS) ? window.NIAT_CARDS[i] : null;
+    if (!entry) return [];
+    return Array.isArray(entry.menu) ? entry.menu : [];
+  }
+
   container?.addEventListener('click', (e) => {
     const card = e.target.closest('.card');
     if (!card) return;
@@ -162,21 +171,38 @@ document.addEventListener('DOMContentLoaded', () => {
     // پرواز آرام کبوترها
     pigeons.burstAt(e.clientX, e.clientY);
 
-    // منوی اختصاصی کارت
-    const menuData = card.getAttribute('data-menu');
-    if (menuData){
-      let items = [];
-      try { items = JSON.parse(menuData); } catch { items = []; }
-      if (!items.length) return;
+    // منوی اختصاصی کارت از دادهٔ مشترک
+    const items = getCardMenuItems(card);
+    if (items.length){
       e.stopPropagation();
       openMenuAt(e, items);
       return;
     }
 
     // لینک مستقیم کارت
-    const url = card.getAttribute('data-url');
+    const url = getCardDirectUrl(card);
     if (url) window.open(url, '_blank', 'noopener,noreferrer');
   });
+
+  // نشانی مستقیم کارت‌های بدون زیرمنو -
+  // Direct payment URL for cards without a submenu
+  function getCardDirectUrl(card){
+    const i = Number(card.getAttribute('data-card'));
+    const entry = Array.isArray(window.NIAT_CARDS) ? window.NIAT_CARDS[i] : null;
+    return entry && entry.url ? entry.url : '';
+  }
+
+  // فال‌بک برنامه‌ای تصاویر کارت -
+  // Programmatic image fallback (replaces inline onerror attributes for CSP readiness)
+  function bindImageFallback(){
+    document.querySelectorAll('.card img').forEach(img => {
+      img.addEventListener('error', () => {
+        img.src = 'images/cards/fallback.webp';
+        img.classList.add('missing');
+      }, { once: true });
+    });
+  }
+  bindImageFallback();
 
   function buildMenu(items){
     const ul = document.createElement('ul');
