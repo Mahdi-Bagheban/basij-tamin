@@ -812,6 +812,14 @@ body::after {
   overflow: hidden
 }
 
+/* عنوان مودال: سطح h2 برای ترتیب معنایی، با اندازهٔ بصری قبلی */
+/* Modal heading: h2 level for correct outline, keeping the previous visual size */
+#thank-title {
+  font-size: 1.17em;
+  font-weight: 700;
+  margin: 1em 0
+}
+
 .thank-decor::before,
 .thank-decor::after {
   content: "";

@@ -4,7 +4,7 @@
   "description": "Static site for Basij payment portal (GitHub Pages deploy)",
   "private": true,
   "scripts": {
-    "start": "echo \"Static project - use npm run build and serve ./site\"",
+    "start": "SITE_ORIGIN=${SITE_ORIGIN:-http://localhost:8080} node scripts/prepare-site.mjs && python3 -m http.server 8080 --directory site",
     "validate": "node --check cards-scripts.js && node --check payment-scripts.js && node --check src/js/clarity.js && node --check src/js/data.js && node --check src/js/utils.js && node --check src/js/splash.js && node --check src/js/dotlottie-fallback.js && node --check scripts/prepare-site.mjs && node --check scripts/validate-site.mjs && node scripts/validate-site.mjs",
     "build": "node scripts/prepare-site.mjs"
   },

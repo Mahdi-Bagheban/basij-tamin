@@ -170,6 +170,12 @@ On project pages (`https://<owner>.github.io/Basij-Tamin/`), crawlers only read 
 
 `cards-form.html` and `payment-form.html` contain no inline script or style and ship a strict meta-CSP (`script-src 'self'`); `scripts/validate-site.mjs` enforces this in CI. `index.html` and `404.html` keep a single inline `<style>` block and therefore allow `style-src 'unsafe-inline'`.
 
+> **محدودیت پذیرفته‌شده:** طبق CSP Level 3، دستور `frame-ancestors` هنگام تحویل از طریق `<meta>` نادیده گرفته می‌شود. چون GitHub Pages هدر سفارشی نمی‌پذیرد، محافظت Clickjacking تنها در مسیر خود-میزبانی (هدرهای `X-Frame-Options` و `frame-ancestors` در `nginx.conf`) فعال است.
+>
+> ---
+>
+> **Accepted limitation:** per CSP Level 3, `frame-ancestors` is ignored when delivered in a `<meta>` element. Because GitHub Pages cannot send custom headers, clickjacking protection is only active on the self-hosted path (`X-Frame-Options` and `frame-ancestors` in `nginx.conf`).
+
 #### دارایی‌های dotLottie — dotLottie assets
 
 فقط رندرر پیش‌فرض (`svg`) و چانک‌های موردنیاز آن در `assets/vendor/` نگهداری می‌شوند. اگر در آینده صفت `renderer="canvas"`، `renderer="html"`، `light` یا `worker` به `<dotlottie-player>` اضافه شد، باید چانک متناظر از بستهٔ رسمی `@dotlottie/player-component@2.7.12` دوباره کپی شود.
