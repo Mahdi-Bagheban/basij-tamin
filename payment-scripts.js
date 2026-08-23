@@ -45,9 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // موبایل
   const mobileInput = document.getElementById('mobile');
-  const normalizeTo09 = raw => { let v = raw || ''; if (v.startsWith('0098')) v = v.slice(4); else if (v.startsWith('98')) v = v.slice(2); if (!v.startsWith('0')) v = '0' + v; return v; };
   mobileInput.addEventListener('input', () => { const raw = toEnDigits(mobileInput.value).replace(/[^\d]/g, ''); mobileInput.value = raw; });
-  mobileInput.addEventListener('blur', () => { const raw = toEnDigits(mobileInput.value).replace(/[^\d]/g, ''); if (!raw) return; const val = normalizeTo09(raw); if (/^09\d{9}$/.test(val)) mobileInput.value = toFaDigits(val); });
+  mobileInput.addEventListener('blur', () => { const raw = toEnDigits(mobileInput.value).replace(/[^\d]/g, ''); if (!raw) return; const val = normalizeMobile(raw); if (/^09\d{9}$/.test(val)) mobileInput.value = toFaDigits(val); });
   mobileInput.addEventListener('focus', () => { const raw = toEnDigits(mobileInput.value).replace(/[^\d]/g, ''); mobileInput.value = raw; });
 
   // کمک‌ها
@@ -218,8 +217,9 @@ document.addEventListener('DOMContentLoaded', () => {
     removeBtn.addEventListener('click', () => {
       if (removeBtn.hasAttribute('disabled')) return;
       const key = getIntentKeyFromRow(row);
-      row.dispatchEvent(new CustomEvent('remove-intent', { bubbles: true, detail: { key } }));
       if (key) removeFlowerByKey(key);
+      // Release the per-row observer before detaching the node.
+      ro.disconnect();
       row.remove();
       updateRemoveState(); updateTotalAndTitle(); updateScrollMode();
     });
@@ -343,12 +343,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // نصب اجزا
     row.append(addBtn, intentBox, amountHolder, customHolder, removeBtn);
 
-    // بستن سراسری با Escape
-    function closeAllPanels() { document.querySelectorAll('.intent-panel.open, .amount-panel.open').forEach(p => p.classList.remove('open')); }
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeAllPanels(); } });
-
     return row;
   }
+
+  // بستن سراسری همهٔ پنل‌ها با Escape — یک شنونده برای کل صفحه
+  // Single document-level listener closes every open panel (no per-row listeners).
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.intent-panel.open, .amount-panel.open').forEach(p => {
+      p.classList.remove('open');
+      p.setAttribute('aria-hidden', 'true');
+      p.previousElementSibling?.setAttribute('aria-expanded', 'false');
+    });
+  });
 
   function updateRemoveState() {
     const rows = [...intentsWrap.querySelectorAll('.intent-row')];
@@ -456,9 +463,8 @@ document.addEventListener('DOMContentLoaded', () => {
       firstInvalid ||= el;
     };
     const mobileRaw = toEnDigits(mobile.value).replace(/[^\d]/g, '');
-    const norm = (v) => { let x = v; if (x.startsWith('0098')) x = x.slice(4); else if (x.startsWith('98')) x = x.slice(2); if (!x.startsWith('0')) x = '0' + x; return x; };
     if (fullname.value.trim().length < 3) invalidate(fullname, 'نام کامل را وارد کنید'); else err(fullname);
-    if (!/^09\d{9}$/.test(norm(mobileRaw))) invalidate(mobile, 'شماره موبایل صحیح نیست'); else err(mobile);
+    if (!/^09\d{9}$/.test(normalizeMobile(mobileRaw))) invalidate(mobile, 'شماره موبایل صحیح نیست'); else err(mobile);
     if (!provinceSel.value) invalidate(provinceSel, 'استان را انتخاب کنید'); else err(provinceSel);
     if (!citySel.value) invalidate(citySel, 'شهر را انتخاب کنید'); else err(citySel);
 

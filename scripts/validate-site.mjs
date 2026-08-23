@@ -23,6 +23,26 @@ const sourceFiles = [
 const outputDirectory = path.join(root, 'site');
 const sourceReferencePattern = /\b(?:src|href)\s*=\s*["']([^"']+)["']/gi;
 const cssReferencePattern = /url\(\s*["']?([^"')]+)["']?\s*\)/gi;
+const inlineHandlerPattern = /\son[a-z]+\s*=\s*["']/i;
+// Pages that must stay free of inline scripts so a strict CSP can be applied.
+const cspStrictPages = ['cards-form.html', 'payment-form.html'];
+const inlineScriptPattern = /<script(?![^>]*\bsrc\s*=)[^>]*>/i;
+
+/**
+ * بررسی نبود هندلر اینلاین و اسکریپت اینلاین در صفحات با CSP سخت‌گیرانه.
+ * ---
+ * Ensures no inline handlers exist and CSP-strict pages carry no inline scripts.
+ * @param {string} relativePath - مسیر نسبی فایل / file path relative to its root
+ * @param {string} content - محتوای HTML / HTML content
+ */
+function assertCspSafety(relativePath, content) {
+  if (inlineHandlerPattern.test(content)) {
+    throw new Error(`Inline event handler found (CSP regression): ${relativePath}`);
+  }
+  if (cspStrictPages.includes(path.basename(relativePath)) && inlineScriptPattern.test(content)) {
+    throw new Error(`Inline <script> found on a CSP-strict page: ${relativePath}`);
+  }
+}
 
 function isExternalOrFragment(value) {
   return /^(?:[a-z][a-z\d+.-]*:|\/\/|#|data:|__SITE_ORIGIN__)/i.test(value);
@@ -43,6 +63,8 @@ async function assertFile(filePath) {
 async function validateReferences(filePath, rootDirectory) {
   const content = await readFile(filePath, 'utf8');
   const patterns = [sourceReferencePattern, cssReferencePattern];
+
+  if (/\.html$/i.test(filePath)) assertCspSafety(path.relative(rootDirectory, filePath), content);
 
   for (const pattern of patterns) {
     pattern.lastIndex = 0;

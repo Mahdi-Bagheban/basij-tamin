@@ -7,6 +7,21 @@
   font-family: 'Vazirmatn', sans-serif
 }
 
+/* عنوان بصری‌پنهان — دسترس‌پذیری و ساختار معنایی */
+/* Visually hidden heading for accessibility and semantics */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* لینک پرش به محتوا — دسترس‌پذیری */
 .skip-link {
   position: absolute;

@@ -78,6 +78,48 @@ const deepFreeze = obj => {
     return obj;
 };
 
+/**
+ * دسترسی امن به حافظهٔ محلی؛ در مرورگرهای با ذخیره‌سازی مسدود استثنا پرتاب نمی‌کند.
+ * ---
+ * Safe localStorage access; never throws when storage is blocked or unavailable.
+ */
+const safeStorage = {
+    get(key, fallback = null) {
+        try {
+            // Access can throw in private mode or when storage is disabled.
+            const value = window.localStorage.getItem(key);
+            return value === null ? fallback : value;
+        } catch {
+            return fallback;
+        }
+    },
+    set(key, value) {
+        try {
+            window.localStorage.setItem(key, value);
+            return true;
+        } catch {
+            // Quota or policy errors must never break page logic.
+            return false;
+        }
+    },
+};
+
+/**
+ * یکسان‌سازی شمارهٔ موبایل ایران به قالب 09XXXXXXXXX.
+ * ---
+ * Normalizes an Iranian mobile number to the 09XXXXXXXXX format.
+ * @param {string} raw - ارقام ورودی (لاتین یا فارسی) / input digits (latin or persian)
+ * @returns {string} شمارهٔ یکسان‌شده / normalized number
+ */
+const normalizeMobile = raw => {
+    let value = toEnDigits(String(raw ?? '')).replace(/\D/g, '');
+    if (!value) return '';
+    if (value.startsWith('0098')) value = value.slice(4);
+    else if (value.startsWith('98')) value = value.slice(2);
+    if (!value.startsWith('0')) value = '0' + value;
+    return value;
+};
+
 // Expose to window
 window.PigeonGlide = PigeonGlide;
 window.toEnDigits = toEnDigits;
@@ -86,3 +128,5 @@ window.debounce = debounce;
 window.toFaChars = toFaChars;
 window.uniq = uniq;
 window.deepFreeze = deepFreeze;
+window.safeStorage = safeStorage;
+window.normalizeMobile = normalizeMobile;

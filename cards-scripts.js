@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileControls = document.getElementById('mobile-controls');
   const logoRainBox = document.getElementById('logo-rain');
 
-  setView(localStorage.getItem('cardViewMode') || 'small');
-  setMode(localStorage.getItem('dayNightMode') || 'day');
+  setView(safeStorage.get('cardViewMode', 'small'));
+  setMode(safeStorage.get('dayNightMode', 'day'));
   hideControls();
 
   let isExpanded=false, isAnimating=false;
@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.toggle('active', active);
       btn.setAttribute('aria-pressed', String(active));
     });
-    localStorage.setItem('cardViewMode', view);
+    safeStorage.set('cardViewMode', view);
   }
   viewButtons.forEach(btn => btn.addEventListener('click', () => setView(btn.dataset.view)));
 
@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.toggle('active', active);
       btn.setAttribute('aria-pressed', String(active));
     });
-    localStorage.setItem('dayNightMode', mode);
+    safeStorage.set('dayNightMode', mode);
   }
   modeButtons.forEach(btn => btn.addEventListener('click', () => setMode(btn.dataset.mode)));
 

@@ -5,6 +5,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- سیاست امنیت محتوا؛ این صفحه هیچ اسکریپت یا استایل اینلاینی ندارد -->
+  <!-- Strict Content-Security-Policy; this page carries no inline script or style -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self'; script-src 'self' https://*.clarity.ms; connect-src 'self' https://*.clarity.ms https://*.microsoft.com">
   <meta name="theme-color" content="#1E5939" />
   <!-- عنوان و نسخه صفحه کارت‌ها -->
   <title>انتخاب نیت خیر - گروه جهادی بسیج</title>
@@ -57,6 +60,7 @@
   <!-- سربرگ و دکمه باز/بسته پنل کارت‌ها -->
   <!-- کارکرد: با کلیک، پنل کارت‌ها باز/بسته و انیمیشن‌ها مدیریت می‌شود -->
   <header class="header-bar" role="banner">
+    <h1 class="visually-hidden">انتخاب نیت خیر — گروه جهادی بسیج شهدای سازمان تأمین اجتماعی</h1>
     <button id="gateway-trigger" class="title-button" aria-controls="gateway-panel" aria-expanded="false">
       <div class="title-frame">
         <picture class="title-picture">
@@ -96,7 +100,7 @@
 
   <!-- پنل کارت‌ها: در آغاز بسته است و با دکمه باز می‌شود -->
   <!-- کارکرد: شامل ردیف کنترل‌های موبایل و گرید کارت‌ها -->
-  <main id="gateway-panel" class="gateway-panel collapsed" role="region" aria-label="فهرست کارت‌ها">
+  <main id="gateway-panel" class="gateway-panel collapsed" aria-label="فهرست کارت‌ها">
     <section class="cards-bg-green">
       <!-- کنترل‌های موبایل: نمای کارت‌ها + حالت -->
       <!-- کارکرد: ظاهر شدن فقط روی موبایل به‌جای کنترل‌های ثابت دسکتاپ -->

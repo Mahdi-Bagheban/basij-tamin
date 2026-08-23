@@ -57,10 +57,15 @@ async function assertRequiredPaths() {
 }
 
 async function replaceOriginTokens(siteOrigin) {
+  // ISO date (YYYY-MM-DD) used for sitemap freshness signals.
+  const buildDate = new Date().toISOString().slice(0, 10);
+
   for (const relativePath of replaceableFiles) {
     const filePath = path.join(outputDirectory, relativePath);
     const source = await readFile(filePath, 'utf8');
-    const output = source.replaceAll('__SITE_ORIGIN__', siteOrigin);
+    const output = source
+      .replaceAll('__SITE_ORIGIN__', siteOrigin)
+      .replaceAll('__BUILD_DATE__', buildDate);
 
     if (output.includes('__SITE_ORIGIN__')) {
       throw new Error(`Unresolved site-origin token in ${relativePath}`);

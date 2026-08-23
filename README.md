@@ -154,6 +154,30 @@ python3 -m http.server 8080 --directory site
 - **امنیت انتقال — Transport security:** TLS و HSTS باید در reverse proxy یا load balancer لایهٔ HTTPSِ نهایی پیکربندی شوند؛ Nginx این مخزن روی پورت داخلی `8080` سرویس می‌دهد.
 - **وضعیت پرداخت — Payment status:** این نسخه به PSP متصل نیست و هیچ تراکنشی را ثبت یا ارسال نمی‌کند؛ پیش از ادعای پرداخت یا انتقال بانکی، اتصال سمت سرور و callback امن PSP لازم است.
 
+#### محدودیت GitHub Pages پروژه‌ای — Project-Pages limitation
+
+در انتشار «پروژه‌ای» (`https://<owner>.github.io/Basij-Tamin/`) خزنده‌ها فقط `robots.txt` ریشهٔ دامنه را می‌خوانند؛ بنابراین `Basij-Tamin/robots.txt` نادیده گرفته می‌شود و باید `sitemap.xml` را مستقیماً در Google Search Console ثبت کنید. در استقرار روی دامنهٔ اختصاصی (یا مسیر خود-میزبانی با Nginx) این محدودیت وجود ندارد و `robots.txt` معتبر است.
+
+---
+
+On project pages (`https://<owner>.github.io/Basij-Tamin/`), crawlers only read the domain-root `robots.txt`, so `Basij-Tamin/robots.txt` is ignored and `sitemap.xml` must be submitted directly in Google Search Console. A custom domain (or the self-hosted Nginx path) removes this limitation.
+
+#### سیاست امنیت محتوا — Content Security Policy
+
+`cards-form.html` و `payment-form.html` هیچ اسکریپت یا استایل اینلاینی ندارند و متا-CSP سخت‌گیرانه (`script-src 'self'`) دارند؛ اسکریپت `scripts/validate-site.mjs` این وضعیت را در CI تضمین می‌کند. `index.html` و `404.html` تنها یک بلوک `<style>` اینلاین دارند و از `style-src 'unsafe-inline'` استفاده می‌کنند.
+
+---
+
+`cards-form.html` and `payment-form.html` contain no inline script or style and ship a strict meta-CSP (`script-src 'self'`); `scripts/validate-site.mjs` enforces this in CI. `index.html` and `404.html` keep a single inline `<style>` block and therefore allow `style-src 'unsafe-inline'`.
+
+#### دارایی‌های dotLottie — dotLottie assets
+
+فقط رندرر پیش‌فرض (`svg`) و چانک‌های موردنیاز آن در `assets/vendor/` نگهداری می‌شوند. اگر در آینده صفت `renderer="canvas"`، `renderer="html"`، `light` یا `worker` به `<dotlottie-player>` اضافه شد، باید چانک متناظر از بستهٔ رسمی `@dotlottie/player-component@2.7.12` دوباره کپی شود.
+
+---
+
+Only the default `svg` renderer and its chunks are kept in `assets/vendor/`. If a `renderer="canvas"`, `renderer="html"`, `light`, or `worker` attribute is later added to `<dotlottie-player>`, copy the matching chunk back from the official `@dotlottie/player-component@2.7.12` package.
+
 ---
 
 ## 📁 ساختار پروژه
@@ -180,7 +204,9 @@ Basij-Tamin/
 │   │   └── fonts.css          # فونت‌های مشترک — shared fonts
 │   └── js/
 │       ├── clarity.js         # اسکریپت تحلیل (فقط روی HTTPS) — analytics (HTTPS only)
-│       ├── utils.js           # توابع مشترک — shared utilities
+│       ├── utils.js           # توابع مشترک — shared utilities (safeStorage, normalizeMobile)
+│       ├── splash.js          # منطق صفحهٔ اسپلش — splash-page logic
+│       ├── dotlottie-fallback.js # فالبک پلیر با SRI — player fallback with SRI
 │       └── data.js            # داده‌های استان/نیت (منبع واحد نشانی‌های پرداخت)
 │                              # provinces & niat data (single source of payment URLs)
 │

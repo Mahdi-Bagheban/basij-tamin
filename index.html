@@ -5,6 +5,9 @@
   <!-- Version 7.0.0 -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- سیاست امنیت محتوا برای مسیر GitHub Pages که هدر سفارشی نمی‌پذیرد -->
+  <!-- Content-Security-Policy for the GitHub Pages path, which cannot send custom headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; form-action 'self'; img-src 'self' data:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://cdn.jsdelivr.net https://*.clarity.ms; connect-src 'self' https://*.clarity.ms https://*.microsoft.com; worker-src 'self' blob:">
   <meta name="theme-color" content="#0b3a22">
   <meta name="version" content="7.0.0">
   <meta name="description" content="سامانه انتخاب و بررسی نیات خیر گروه جهادی بسیج شهدای سازمان تأمین اجتماعی">
@@ -31,24 +34,7 @@
 
   <!-- فالبک: اگر مؤلفه ثبت نشد، از CDN بارگذاری شود (بدون تغییر در منطق فعلی) -->
   <!-- کارکرد: تضمین موجودبودن مؤلفه dotlottie-player حتی در صورت نبود فایل محلی -->
-  <script type="module">
-    (async () => {
-      try {
-        if (!customElements.get('dotlottie-player')) {
-          await import('./assets/vendor/dotlottie-player.mjs');
-        }
-      } catch (e) {}
-      if (!customElements.get('dotlottie-player')) {
-        const s = document.createElement('script');
-        s.type = 'module';
-        // Pinned version + SRI to block upstream supply-chain tampering
-        s.src = 'https://cdn.jsdelivr.net/npm/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs';
-        s.integrity = 'sha384-ypAFdIpmPhrhuVLN9fmIZaqZHGUVSzHiiplL/kPO2+gJ4Na4yRVbVt0YhyvWdbwn';
-        s.crossOrigin = 'anonymous';
-        document.head.appendChild(s);
-      }
-    })();
-  </script>
+  <script type="module" src="src/js/dotlottie-fallback.js"></script>
 
   <!-- فونت وزیر (لوکال از دایرکتوری پروژه) -->
   <!-- کارکرد: استفاده از فایل مشترک فونت‌ها -->
@@ -220,8 +206,19 @@
     .credit.show{ opacity:1; transform:none; filter:none; }
     .credit-en{ direction:ltr; } .credit-fa{ direction:rtl; }
 
+    /* عنوان بصری‌پنهان برای ساختار معنایی و خزنده‌ها */
+    /* Visually hidden heading for semantics and crawlers */
+    .visually-hidden{
+      position:absolute; width:1px; height:1px;
+      margin:-1px; padding:0; border:0;
+      clip:rect(0 0 0 0); clip-path:inset(50%);
+      overflow:hidden; white-space:nowrap;
+    }
+
     /* دکمه ردشدن از لودینگ */
     .skip-loader{
+      display:inline-block;
+      text-decoration:none;
       margin-top:10px;
       background:rgba(255,255,255,.10);
       border:1px solid rgba(255,255,255,.25);
@@ -250,12 +247,17 @@
   <!-- اسکریپت تحلیل (فایل مشترک) - به‌صورت غیرمسدودکننده -->
   <!-- کارکرد: بارگذاری Clarity برای ردیابی تعاملات بدون بلوک رندر -->
   <script src="src/js/clarity.js" defer></script>
+
+  <!-- منطق اسپلش (استخراج‌شده از اینلاین برای سازگاری با CSP) -->
+  <!-- Splash logic, extracted from inline markup for CSP compliance -->
+  <script src="src/js/splash.js" defer></script>
 </head>
 <body>
   <div class="page" aria-label="درگاه پرداخت">
     <!-- عنوان تصویری -->
     <!-- کارکرد: نمایش لوگوی تیتر صفحه -->
     <header class="top" aria-label="سرتیتر">
+      <h1 class="visually-hidden">سامانه نیات خیر گروه جهادی بسیج شهدای سازمان تأمین اجتماعی</h1>
       <img class="title-banner" src="images/logo/title.webp" alt="درگاه پرداخت گروه جهادی بسیج شهدای سازمان تامین اجتماعی">
     </header>
 
@@ -279,8 +281,9 @@
       <!-- نسخه زیر لودینگ و بالای کپی‌رایت -->
       <div class="version" aria-label="نسخه">نسخه 7.0.0</div>
 
-      <!-- دکمه ردشدن از صفحه لودینگ - دسترس‌پذیر با کیبورد -->
-      <button type="button" id="skip-loader" class="skip-loader">ردشدن و ورود به درگاه ←</button>
+      <!-- دکمه ردشدن از صفحه لودینگ - لینک واقعی و قابل‌خزیدن -->
+      <!-- Skip control is a real anchor so crawlers and no-JS users can follow it -->
+      <a href="cards-form.html" id="skip-loader" class="skip-loader">ردشدن و ورود به درگاه ←</a>
     </section>
   </div>
 
@@ -293,52 +296,6 @@
     </div>
   </footer>
 
-  <!-- اسکریپت‌های صفحه (حفظ منطق موجود: انیمیشن نوار و هدایت به صفحه کارت‌ها) -->
-  <script>
-    "use strict";
-    // نمایش کپی‌رایت: EN → FA پس از ۴ ثانیه
-    // کارکرد: سوئیچ تدریجی بین دو متن کپی‌رایت
-    const creditEN = document.getElementById("credit-en");
-    const creditFA = document.getElementById("credit-fa");
-    creditEN.classList.add("show");
-    setTimeout(function(){ creditEN.classList.remove("show"); creditFA.classList.add("show"); }, 4000);
-
-    // Skip-to-content guard: navigate only once, from timer or user action
-    const NEXT_PAGE = "cards-form.html";
-    let navigated = false;
-    function goNext(){
-      if (navigated) return;
-      navigated = true;
-      window.location.href = NEXT_PAGE;
-    }
-    document.getElementById("skip-loader").addEventListener("click", goNext);
-
-    // همگام‌سازی کامل با یک زمان‌سنج واحد و easing نرم
-    // کارکرد: انیمیشن پیشروی نوار شیشه‌ای با ARIA به‌روزشونده
-    const bar = document.querySelector(".glass-bar");
-    const start = performance.now();
-    const DURATION = 2500; // ms — shortened splash for faster access to content
-
-    // تابع ease نرم (cubic)
-    const easeInOutCubic = (x) => (x < 0.5) ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3)/2;
-
-    function raf(now){
-      const t = Math.min(1, (now - start)/DURATION);  // 0..1
-      const te = easeInOutCubic(t);
-      const pct = Math.round(te*100);
-
-      // بروزرسانی ARIA و متغیر CSS مشترک
-      bar.setAttribute("aria-valuenow", pct);
-      bar.style.setProperty('--p', (te*100).toFixed(2) + '%');
-
-      if(t < 1){ requestAnimationFrame(raf); }
-    }
-    requestAnimationFrame(raf);
-
-    // هدایت به فرم کارت‌ها پس از پایان
-    // کارکرد: انتقال خودکار به صفحه اصلی انتخاب مسیر پرداخت
-    setTimeout(goNext, DURATION);
-  </script>
 </body>
 </html>
 <!-- ساخته شده توسط مهدی باغبانپور بروجنی -->
