@@ -5,11 +5,12 @@
  * Prepares the static deployment output and replaces the public site URL.
  */
 
-import { access, cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { access, cp, mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
-import { minify as terserMinify } from 'terser';
-import { CleanCSS } from 'clean-css';
+import * as terser from 'terser';
+const terserMinify = terser.minify;
+import CleanCSS from 'clean-css';
 
 const root = process.cwd();
 const outputDirectory = path.join(root, 'site');
@@ -101,29 +102,34 @@ async function main() {
     for (const relativePath of requiredPaths) {
         const sourcePath = path.join(root, relativePath);
         const destPath = path.join(outputDirectory, relativePath);
-        let source = await readFile(sourcePath, 'utf8');
+        const sourceStat = await stat(sourcePath);
+        if (sourceStat.isDirectory()) {
+            await cp(sourcePath, destPath, { recursive: true });
+        } else {
+            let source = await readFile(sourcePath, 'utf8');
 
-        // Minify JS and CSS files
-        if (relativePath.endsWith('.js')) {
-            const minified = await terserMinify(source, {});
-            source = minified.code;
-        } else if (relativePath.endsWith('.css')) {
-            source = new CleanCSS({}).minify(source).styles;
-        }
-
-        // Replace tokens in HTML/XML/TXT files
-        if (replaceableFiles.includes(relativePath)) {
-            const buildDate = new Date().toISOString().slice(0, 10);
-            source = source
-                .replaceAll('__SITE_ORIGIN__', siteOrigin)
-                .replaceAll('__BUILD_DATE__', buildDate);
-
-            if (source.includes('__SITE_ORIGIN__')) {
-                throw new Error(`Unresolved site-origin token in ${relativePath}`);
+            // Minify JS and CSS files
+            if (relativePath.endsWith('.js')) {
+                const minified = await terserMinify(source, {});
+                source = minified.code;
+            } else if (relativePath.endsWith('.css')) {
+                source = new CleanCSS({}).minify(source).styles;
             }
-        }
 
-        await writeFile(destPath, source, 'utf8');
+            // Replace tokens in HTML/XML/TXT files
+            if (replaceableFiles.includes(relativePath)) {
+                const buildDate = new Date().toISOString().slice(0, 10);
+                source = source
+                    .replaceAll('__SITE_ORIGIN__', siteOrigin)
+                    .replaceAll('__BUILD_DATE__', buildDate);
+
+                if (source.includes('__SITE_ORIGIN__')) {
+                    throw new Error(`Unresolved site-origin token in ${relativePath}`);
+                }
+            }
+
+            await writeFile(destPath, source, 'utf8');
+        }
     }
 
     await assertNoUnresolvedTokens(outputDirectory);

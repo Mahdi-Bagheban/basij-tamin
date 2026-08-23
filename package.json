@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "terser": "^5.14.0",
-    "clean-css": "^5.3.10"
+    "clean-css": "*"
   },
   "keywords": [],
   "author": "",
