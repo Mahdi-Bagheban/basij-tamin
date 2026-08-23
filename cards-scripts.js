@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const items = getCardMenuItems(card);
     if (items.length){
-      openMenuAt({ clientX, clientY }, items);
+      openMenuAt({ clientX, clientY }, items, card);
       return;
     }
 
@@ -223,16 +223,33 @@ document.addEventListener('DOMContentLoaded', () => {
       const li = document.createElement('li');
       if (item.submenu && Array.isArray(item.submenu) && item.submenu.length){
         const span = document.createElement('span'); span.textContent = item.title;
-        span.addEventListener('click', (e) => {
-          e.stopPropagation();
-          ul.querySelectorAll('li.expanded').forEach(o => { if (o !== li) o.classList.remove('expanded'); });
+        span.setAttribute('role', 'menuitem');
+        span.setAttribute('aria-haspopup', 'true');
+        span.setAttribute('aria-expanded', 'false');
+        span.tabIndex = -1;
+        const toggle = () => {
+          ul.querySelectorAll('li.expanded').forEach(o => {
+            if (o !== li) { o.classList.remove('expanded'); o.querySelector(':scope > span')?.setAttribute('aria-expanded', 'false'); }
+          });
           li.classList.toggle('expanded');
+          span.setAttribute('aria-expanded', String(li.classList.contains('expanded')));
+        };
+        span.addEventListener('click', (e) => { e.stopPropagation(); toggle(); });
+        span.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight'){
+            e.preventDefault(); e.stopPropagation();
+            if (!li.classList.contains('expanded')) toggle();
+          } else if (e.key === 'ArrowLeft' && li.classList.contains('expanded')){
+            e.preventDefault(); e.stopPropagation(); toggle();
+          }
         });
         li.appendChild(span);
         li.appendChild(buildMenu(item.submenu));
       } else {
         const a = document.createElement('a');
         a.href = item.url || '#'; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = item.title;
+        a.setAttribute('role', 'menuitem');
+        a.tabIndex = -1;
         li.appendChild(a);
       }
       ul.appendChild(li);
@@ -240,10 +257,56 @@ document.addEventListener('DOMContentLoaded', () => {
     return ul;
   }
 
-  function openMenuAt(e, items){
+  // پیمایش کیبوردی منوی کارت‌ها؛ همان الگوی roving focus فرم پرداخت -
+  // Roving-focus keyboard navigation for card menus, mirroring the payment form pattern.
+  function activateMenuKeyboard(menu, invoker){
+    // Only items inside expanded branches are reachable (collapsed lists are display:none).
+    const visibleItems = () => [...menu.querySelectorAll('[role="menuitem"]')].filter(el => el.offsetParent !== null);
+
+    const focusItem = (index) => {
+      const items = visibleItems();
+      if (!items.length) return;
+      const target = items[(index + items.length) % items.length];
+      items.forEach(el => { el.tabIndex = el === target ? 0 : -1; });
+      target.focus();
+    };
+
+    menu.addEventListener('keydown', (event) => {
+      const items = visibleItems();
+      if (!items.length) return;
+      const found = items.indexOf(document.activeElement);
+      // Treat "focus outside the menu" as a position before the first item.
+      const current = found === -1 ? -1 : found;
+
+      switch (event.key){
+        case 'ArrowDown': event.preventDefault(); focusItem(current < 0 ? 0 : current + 1); break;
+        case 'ArrowUp': event.preventDefault(); focusItem(current < 0 ? items.length - 1 : current - 1); break;
+        case 'Home': event.preventDefault(); focusItem(0); break;
+        case 'End': event.preventDefault(); focusItem(items.length - 1); break;
+        case 'Tab':
+          // Keep focus inside the menu; it is appended to <body> and would otherwise jump to page end.
+          event.preventDefault();
+          if (current < 0) focusItem(event.shiftKey ? items.length - 1 : 0);
+          else focusItem(current + (event.shiftKey ? -1 : 1));
+          break;
+        default: break;
+      }
+    });
+
+    menu.addEventListener('click', (event) => {
+      if (event.target.closest('a[role="menuitem"]')) closeMenus();
+    });
+
+    menu._invoker = invoker || null;
+    focusItem(0);
+  }
+
+  function openMenuAt(e, items, invoker){
     closeMenus();
     const menu = document.createElement('div');
     menu.className = 'dropdown-menu';
+    menu.setAttribute('role', 'menu');
+    menu.setAttribute('aria-label', 'فهرست نیت‌های این کارت');
     menu.appendChild(buildMenu(items));
     menu.addEventListener('pointerdown', ev => ev.stopPropagation());
     document.body.appendChild(menu);
@@ -256,12 +319,21 @@ document.addEventListener('DOMContentLoaded', () => {
     menu.style.left = left + 'px';
     menu.style.top  = top  + 'px';
     requestAnimationFrame(() => menu.classList.add('show'));
+    activateMenuKeyboard(menu, invoker);
   }
 
-  function closeMenus(){ document.querySelectorAll('.dropdown-menu').forEach(m => m.remove()); }
+  // بستن منوها؛ با returnFocus فوکوس به کارتِ بازکننده برمی‌گردد -
+  // Close menus; returnFocus sends focus back to the card that opened them.
+  function closeMenus(returnFocus){
+    document.querySelectorAll('.dropdown-menu').forEach(m => {
+      const invoker = m._invoker;
+      m.remove();
+      if (returnFocus && invoker) invoker.focus();
+    });
+  }
   document.addEventListener('pointerdown', (ev) => { if (!ev.target.closest('.dropdown-menu')) closeMenus(); }, true);
-  document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') closeMenus(); });
-  window.addEventListener('resize', closeMenus);
+  document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') closeMenus(true); });
+  window.addEventListener('resize', () => closeMenus());
 
   // Tooltip
   const tip = document.createElement('div'); tip.className = 'tooltip-pop'; document.body.appendChild(tip);

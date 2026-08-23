@@ -9,6 +9,7 @@
 .github
 .dockerignore
 ANALYSIS*.md
+docs
 docker-compose.yml
 Dockerfile
 node_modules

@@ -98,9 +98,9 @@
 
 ## 🛠 نصب و راه‌اندازی
 
-### پیش‌نیازها
+### پیش‌نیازها — Prerequisites
 - مرورگر مدرن (Chrome, Firefox, Safari, Edge)
-- وب‌سرور ساده یا Live Server
+- Node.js 22+ و Python 3 (برای اسکریپت `npm start`)
 
 ### مراحل نصب
 
@@ -111,22 +111,35 @@ git clone https://github.com/Mahdi-Arts/Basij-Tamin.git
 # 2. ورود به پوشه — Enter the folder
 cd Basij-Tamin
 
-# 3. اجرا با Live Server (VS Code)
-# یا باز کردن index.html در مرورگر
+# 3. ساخت و اجرای محلی — Build and serve locally
+npm start
 ```
 
-### اجرای محلی
+### اجرای محلی — Local run
 
-1. فایل `index.html` را در مرورگر باز کنید
-2. یا از افزونه **Live Server** در VS Code استفاده کنید
+پروژه از ماژول‌های ES و توکن `__SITE_ORIGIN__` استفاده می‌کند؛ بنابراین **باز کردن مستقیم فایل با `file://` کار نمی‌کند** و باید از یک وب‌سرور محلی استفاده شود. دستور زیر خروجی را می‌سازد و روی `http://localhost:8080` سرو می‌کند:
 
-> **نکته:** در محیط محلی، Microsoft Clarity بارگذاری نمی‌شود.
+---
 
-### تست محلی با سرور - Local Testing with a Static Server
+The project uses ES modules and the `__SITE_ORIGIN__` token, so **opening the files directly over `file://` does not work**; serve them over HTTP instead. The command below builds the output and serves it on `http://localhost:8080`:
 
 ```bash
-python3 -m http.server 8080
-# سپس باز کنید: http://localhost:8080 — then open http://localhost:8080
+npm start
+# نشانی دلخواه: SITE_ORIGIN=https://example.org npm start
+# custom origin: SITE_ORIGIN=https://example.org npm start
+```
+
+> **نکته:** در محیط محلی (پروتکل غیر HTTPS)، Microsoft Clarity بارگذاری نمی‌شود.
+>
+> ---
+>
+> **Note:** Microsoft Clarity is skipped on non-HTTPS local environments.
+
+### تست محلی خروجی ساخته‌شده - Testing the built output
+
+```bash
+npm run validate                                # سنتکس، ارجاعات و گارد CSP — syntax, references, CSP guard
+python3 -m http.server 8080 --directory site    # سرو خروجی نهایی — serve the built output
 ```
 
 ### استقرار - Deployment
@@ -229,6 +242,7 @@ Basij-Tamin/
 ├── 🌐 nginx.conf              # پیکربندی وب‌سرور + هدرهای امنیتی — server config
 │
 ├── ⚙️ .github/workflows/      # تست و دیپلوی خودکار — CI/CD (test + Pages deploy)
+├── 📚 docs/audits/            # گزارش‌های تحلیل دوره‌ای — periodic audit reports
 └── 📜 LICENSE                 # مجوز MIT — MIT license
 ```
 

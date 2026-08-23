@@ -27,11 +27,12 @@ const inlineHandlerPattern = /\son[a-z]+\s*=\s*["']/i;
 // Pages that must stay free of inline scripts so a strict CSP can be applied.
 const cspStrictPages = ['cards-form.html', 'payment-form.html'];
 const inlineScriptPattern = /<script(?![^>]*\bsrc\s*=)[^>]*>/i;
+const cspMetaPattern = /<meta\s+http-equiv=["']Content-Security-Policy["']/i;
 
 /**
- * بررسی نبود هندلر اینلاین و اسکریپت اینلاین در صفحات با CSP سخت‌گیرانه.
+ * بررسی نبود هندلر اینلاین، نبود اسکریپت اینلاین در صفحات سخت‌گیرانه و وجود متا-CSP.
  * ---
- * Ensures no inline handlers exist and CSP-strict pages carry no inline scripts.
+ * Ensures no inline handlers, no inline scripts on CSP-strict pages, and a CSP meta tag.
  * @param {string} relativePath - مسیر نسبی فایل / file path relative to its root
  * @param {string} content - محتوای HTML / HTML content
  */
@@ -41,6 +42,9 @@ function assertCspSafety(relativePath, content) {
   }
   if (cspStrictPages.includes(path.basename(relativePath)) && inlineScriptPattern.test(content)) {
     throw new Error(`Inline <script> found on a CSP-strict page: ${relativePath}`);
+  }
+  if (!cspMetaPattern.test(content)) {
+    throw new Error(`Missing Content-Security-Policy meta tag: ${relativePath}`);
   }
 }
 
