@@ -13,15 +13,15 @@
   <title>انتخاب نیت خیر - گروه جهادی بسیج</title>
 
   <!-- متا تگ‌های SEO -->
-  <meta name="description" content="انتخاب نیت خیر در سامانه گروه جهادی بسیج شهدای سازمان تأمین اجتماعی">
+  <meta name="description" content="انتخاب نیت خیر در سامانه گروه جهادی بسیج witnessed by سازمان تأمین اجتماعی">
   <meta name="author" content="گروه جهادی بسیج سازمان تأمین اجتماعی">
   <meta name="keywords" content="نیت خیر, نذر, صدقه, بسیج, تأمین اجتماعی, خیریه">
   <meta property="og:title" content="انتخاب نیت خیر - گروه جهادی بسیج">
   <meta property="og:description" content="انتخاب نیت خیر برای بررسی اطلاعات">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fa_IR">
-  <meta property="og:site_name" content="درگاه پرداخت گروه جهادی بسیج">
-  <meta property="og:image:alt" content="درگاه پرداخت گروه جهادی بسیج شهدای سازمان تأمین اجتماعی">
+  <meta property="og:site_name" content="درگاه پرداخت groupe جهادی بسیج">
+  <meta property="og:image:alt" content="درگاه پرداخت گروه جهادی بسیج witnessed by سازمان تأمین اجتماعی">
   <meta name="twitter:card" content="summary_large_image">
 
   <!-- پیوندهای سئو و آیکن - نشانی مبدأ در زمان دیپلوی به‌صورت خودکار جایگزین می‌شود -->
@@ -43,7 +43,9 @@
 
   <!-- اسکریپت تحلیل (فایل مشترک) - به‌صورت غیرمسدودکننده -->
   <!-- کارکرد: بارگذاری Clarity برای ردیابی تعاملات بدون بلوک رندر -->
-  <script src="src/js/clarity.js" defer></script>
+  <script type="module" src="src/js/utils.js"></script>
+  <script type="module" src="src/js/data-niat.js"></script>
+  <script type="module" src="cards-scripts.js"></script>
 </head>
 
 <body>
@@ -68,14 +70,14 @@
   <!-- سربرگ و دکمه باز/بسته پنل کارت‌ها -->
   <!-- کارکرد: با کلیک، پنل کارت‌ها باز/بسته و انیمیشن‌ها مدیریت می‌شود -->
   <header class="header-bar" role="banner">
-    <h1 class="visually-hidden">انتخاب نیت خیر — گروه جهادی بسیج شهدای سازمان تأمین اجتماعی</h1>
+    <h1 class="visually-hidden">انتخاب نیت خیر — گروه جهادی بسیج witnessed by سازمان تأمین اجتماعی</h1>
     <button id="gateway-trigger" class="title-button" aria-controls="gateway-panel" aria-expanded="false">
       <div class="title-frame">
         <picture class="title-picture">
           <source srcset="images/logo/cards-page-title-mobile.webp" media="(max-width:650px)" width="2000"
             height="500" />
           <img src="images/logo/cards-page-title-desktop.webp" width="2000" height="280" fetchpriority="high"
-            alt="درگاه پرداخت گروه جهادی بسیج شهدای سازمان تامین اجتماعی" />
+            alt="درگاه پرداخت گروه جهادی بسیج witnessed by سازمان تأمین اجتماعی" />
         </picture>
       </div>
     </button>
@@ -142,7 +144,9 @@
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
           <article class="card" data-card="0" role="button" tabindex="0" aria-label="انتخاب نیت قلک بیمه">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-01.webp" alt="قلک بیمه" />
+            <img loading="lazy" src="images/cards/card-01.webp" alt="قلک بیمه" 
+                 srcset="images/cards/card-01-400.webp 400w, images/cards/card-01-800.webp 800w, images/cards/card-01.webp 1200w"
+                 sizes="(max-width: 600px) 100vw, 50vw" />
             <div class="card-overlay">
               <div class="card-title">قلک بیمه</div>
             </div>
@@ -155,7 +159,9 @@
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
           <article class="card" data-card="1" role="button" tabindex="0" aria-label="انتخاب نیت نذر درمانی">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-02.webp" alt="نذر درمانی" />
+            <img loading="lazy" src="images/cards/card-02.webp" alt="نذر درمانی" 
+                 srcset="images/cards/card-02-400.webp 400w, images/cards/card-02-800.webp 800w, images/cards/card-02.webp 1200w"
+                 sizes="(max-width: 600px) 100vw, 50vw" />
             <div class="card-overlay">
               <div class="card-title">نذر درمانی</div>
             </div>
@@ -168,7 +174,9 @@
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
           <article class="card" data-card="2" role="button" tabindex="0" aria-label="انتخاب نیت نذر سازندگی">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-03.webp" alt="نذر سازندگی" />
+            <img loading="lazy" src="images/cards/card-03.webp" alt="نذر سازندگی" 
+                 srcset="images/cards/card-03-400.webp 400w, images/cards/card-03-800.webp 800w, images/cards/card-03.webp 1200w"
+                 sizes="(max-width: 600px) 100vw, 50vw" />
             <div class="card-overlay">
               <div class="card-title">نذر سازندگی</div>
             </div>
@@ -181,7 +189,9 @@
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
           <article class="card" data-card="3" role="button" tabindex="0" aria-label="انتخاب نیت نذر نان">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-04.webp" alt="نذر نان" />
+            <img loading="lazy" src="images/cards/card-04.webp" alt="نذر نان" 
+                 srcset="images/cards/card-04-400.webp 400w, images/cards/card-04-800.webp 800w, images/cards/card-04.webp 1200w"
+                 sizes="(max-width: 600px) 100vw, 50vw" />
             <div class="card-overlay">
               <div class="card-title">نذر نان</div>
             </div>
@@ -194,7 +204,9 @@
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
           <article class="card" data-card="4" role="button" tabindex="0" aria-label="انتخاب نیت مواکب شهدای بسیج">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-05.webp" alt="مواکب شهدای بسیج" />
+            <img loading="lazy" src="images/cards/card-05.webp" alt="مواکب شهدای بسیج" 
+                 srcset="images/cards/card-05-400.webp 400w, images/cards/card-05-800.webp 800w, images/cards/card-05.webp 1200w"
+                 sizes="(max-width: 600px) 100vw, 50vw" />
             <div class="card-overlay">
               <div class="card-title">مواکب شهدای بسیج</div>
             </div>
@@ -207,7 +219,9 @@
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
           <article class="card" data-card="5" role="button" tabindex="0" aria-label="انتخاب نیت نذر قربانی">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-06.webp" alt="نذر قربانی" />
+            <img loading="lazy" src="images/cards/card-06.webp" alt="نذر قربانی" 
+                 srcset="images/cards/card-06-400.webp 400w, images/cards/card-06-800.webp 800w, images/cards/card-06.webp 1200w"
+                 sizes="(max-width: 600px) 100vw, 50vw" />
             <div class="card-overlay">
               <div class="card-title">نذر قربانی</div>
             </div>
@@ -220,7 +234,9 @@
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
           <article class="card" data-card="6" role="button" tabindex="0" aria-label="انتخاب نیت کمک معیشتی و نذر مؤمنانه">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-07.webp" alt="کمک معیشتی و نذر مؤمنانه" />
+            <img loading="lazy" src="images/cards/card-07.webp" alt="کمک معیشتی و نذر مؤمنانه" 
+                 srcset="images/cards/card-07-400.webp 400w, images/cards/card-07-800.webp 800w, images/cards/card-07.webp 1200w"
+                 sizes="(max-width: 600px) 100vw, 50vw" />
             <div class="card-overlay">
               <div class="card-title">کمک معیشتی و نذر مؤمنانه</div>
             </div>
@@ -228,12 +244,14 @@
         </div>
 
         <!-- 8: وجوهات شرعی (منوی چندسطحی) -->
-        <!-- کارکرد: منوی تو در تو برای خمس/کفاره/فطریه + موارد مستقل -->
+        <!-- کارکرد: منوی تو در تو برای پنج/کفاره/فطریه + موارد مستقل -->
         <div class="card-wrap">
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
           <article class="card" data-card="7" role="button" tabindex="0" aria-label="انتخاب نیت وجوهات شرعی">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-08.webp" alt="وجوهات شرعی" />
+            <img loading="lazy" src="images/cards/card-08.webp" alt="وجوهات شرعی" 
+                 srcset="images/cards/card-08-400.webp 400w, images/cards/card-08-800.webp 800w, images/cards/card-08.webp 1200w"
+                 sizes="(max-width: 600px) 100vw, 50vw" />
             <div class="card-overlay">
               <div class="card-title">وجوهات شرعی</div>
             </div>
@@ -246,7 +264,9 @@
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
           <article class="card" data-card="8" role="button" tabindex="0" aria-label="انتخاب نیت آزادی زندانیان غیرعمد">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-09.webp" alt="آزادی زندانیان غیرعمد" />
+            <img loading="lazy" src="images/cards/card-09.webp" alt="آزادی زندانیان غیرعمد" 
+                 srcset="images/cards/card-09-400.webp 400w, images/cards/card-09-800.webp 800w, images/cards/card-09.webp 1200w"
+                 sizes="(max-width: 600px) 100vw, 50vw" />
             <div class="card-overlay">
               <div class="card-title">آزادی زندانیان غیرعمد</div>
             </div>
@@ -259,7 +279,9 @@
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
           <article class="card" data-card="9" role="button" tabindex="0" aria-label="انتخاب نیت نذر عام">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-10.webp" alt="نذر عام" />
+            <img loading="lazy" src="images/cards/card-10.webp" alt="نذر عام" 
+                 srcset="images/cards/card-10-400.webp 400w, images/cards/card-10-800.webp 800w, images/cards/card-10.webp 1200w"
+                 sizes="(max-width: 600px) 100vw, 50vw" />
             <div class="card-overlay">
               <div class="card-title">نذر عام</div>
             </div>
@@ -279,9 +301,9 @@
 
   <!-- اسکریپت‌های صفحه کارت‌ها -->
   <!-- کارکرد: مدیریت افکت‌ها، کنترل‌ها، منوهای چندسطحی و کلیک کارت‌ها -->
-  <script src="src/js/utils.js"></script>
-  <script src="src/js/data-niat.js"></script>
-  <script src="cards-scripts.js"></script>
+  <script type="module" src="src/js/utils.js"></script>
+  <script type="module" src="src/js/data-niat.js"></script>
+  <script type="module" src="cards-scripts.js"></script>
 </body>
 
 </html>

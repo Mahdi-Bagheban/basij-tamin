@@ -4,10 +4,14 @@
  * Intent-form logic, client-side validation, and accessible UI interactions.
  */
 
+import { toEnDigits, toFaDigits, debounce, PigeonGlide } from './src/js/utils.js';
+import { PROVINCE_LIST, getCitiesOf } from './src/js/data.js';
+import { NIAT_CARDS } from './src/js/data-niat.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   // عناصر
   const params = new URLSearchParams(location.search);
-  const initialCause = params.get('cause') ? params.get('cause').replace(/_/g, ' ') : '';
+  const initialCause = params.get('cause') ? sanitizeText(params.get('cause')).replace(/_/g, ' ') : '';
   const pageTitle = document.getElementById('page-title');
   const provinceSel = document.getElementById('province');
   const citySel = document.getElementById('city');
@@ -28,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ابزار
   const faNF = new Intl.NumberFormat('fa-IR');
   const listFa = new Intl.ListFormat('fa', { type: 'conjunction', style: 'long' });
+  const sanitizeText = s => (s || '').replace(/[<>]/g, '');
 
   // استان/شهر (پیوند وابسته)
   provinceSel.disabled = false;
@@ -95,8 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const dur = 760 + Math.random() * 420; const start = performance.now();
     requestAnimationFrame(function anim(t) {
       const k = Math.min(1, (t - start) / dur); const ease = k < .5 ? 2 * k * k : -1 + (4 - 2 * k) * k;
-      const x = (1 - ease) * (1 - ease) * startX + 2 * (1 - ease) * ease * midX + ease * ease * endX;
-      const y = (1 - ease) * (1 - ease) * startY + 2 * (1 - ease) * ease * midY + ease * ease * endY;
+      const x = (1 - ease) * (1 - ease) * startX + 2 * (1 - ease) * ease * midX + 2 * (1 - ease) * ease * midX + ease * ease * endX;
+      const y = (1 - ease) * (1 - ease) * startY + 2 * (1 - ease) * ease * midY + 2 * (1 - ease) * ease * endY;
       fly.style.opacity = String(Math.min(1, k * 1.2));
       fly.style.transform = `translate3d(${x - startX}px, ${y - startY}px, 0) scale(${.92 + .08 * k}) rotate(${(k * 20 - 10).toFixed(1)}deg)`;
       if (k < 1) requestAnimationFrame(anim); else { fly.remove(); onDone?.(); }
@@ -241,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     intentTrigger.setAttribute('aria-haspopup', 'menu'); intentTrigger.setAttribute('aria-expanded', 'false');
 
     const intentPanel = document.createElement('div'); intentPanel.className = 'intent-panel'; intentPanel.setAttribute('role', 'menu'); intentPanel.setAttribute('aria-hidden', 'true');
-    if (Array.isArray(NIAT_CARDS) && NIAT_CARDS.length) {
+    if (NIAT_CARDS && NIAT_CARDS.length) {
       intentPanel.appendChild(buildMenuList(NIAT_CARDS, (picked) => {
         intentTrigger.textContent = picked;
         closePanel(intentTrigger, intentPanel, true);
@@ -311,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
     amountTrigger.addEventListener('click', (e) => { e.stopPropagation(); amountPanel.classList.contains('open') ? closePanel(amountTrigger, amountPanel, true) : openAmount(); });
     amountTrigger.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') { e.preventDefault(); openAmount(); } });
 
-    amountWrap.append(amountTrigger, amountSel, amountPanel); amountHolder.appendChild(amountWrap);
+    amountWrap.append(amountTrigger, amountSel, amountPanel); amountHolder.append(amountWrap);
 
     // مبلغ دلخواه
     const customHolder = document.createElement('div'); customHolder.className = 'custom-holder';
@@ -516,10 +521,12 @@ document.addEventListener('DOMContentLoaded', () => {
   redirectButton.addEventListener('click', () => {
     location.href = 'cards-form.html';
   });
+
   modalCloseButton.addEventListener('click', closeThankModal);
   thankModal.addEventListener('click', event => {
     if (event.target === thankModal) closeThankModal();
   });
+
   document.addEventListener('keydown', event => {
     if (!thankModal.classList.contains('show')) return;
     if (event.key === 'Escape') {
@@ -548,4 +555,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const pigeons = new PigeonGlide();
 });
+
 /* ساخته شده توسط مهدی باغبانپور بروجنی */

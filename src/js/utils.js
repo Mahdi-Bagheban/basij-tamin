@@ -120,13 +120,5 @@ const normalizeMobile = raw => {
     return value;
 };
 
-// Expose to window
-window.PigeonGlide = PigeonGlide;
-window.toEnDigits = toEnDigits;
-window.toFaDigits = toFaDigits;
-window.debounce = debounce;
-window.toFaChars = toFaChars;
-window.uniq = uniq;
-window.deepFreeze = deepFreeze;
-window.safeStorage = safeStorage;
-window.normalizeMobile = normalizeMobile;
+// Export for use in other modules
+export { PigeonGlide, toEnDigits, toFaDigits, debounce, toFaChars, uniq, deepFreeze, safeStorage, normalizeMobile };

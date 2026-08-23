@@ -4,6 +4,9 @@
  * Intent-selection page interactions, including cards, menus, and view preferences.
  */
 
+import { safeStorage, PigeonGlide } from './src/js/utils.js';
+import { NIAT_CARDS } from './src/js/data-niat.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   // ارجاع‌ها
   const body = document.body;
@@ -163,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Resolve card menu items from the shared NIAT_CARDS data source (src/js/data.js)
   function getCardMenuItems(card){
     const i = Number(card.getAttribute('data-card'));
-    const entry = Array.isArray(window.NIAT_CARDS) ? window.NIAT_CARDS[i] : null;
+    const entry = NIAT_CARDS ? NIAT_CARDS[i] : null;
     if (!entry) return [];
     return Array.isArray(entry.menu) ? entry.menu : [];
   }
@@ -201,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Direct payment URL for cards without a submenu
   function getCardDirectUrl(card){
     const i = Number(card.getAttribute('data-card'));
-    const entry = Array.isArray(window.NIAT_CARDS) ? window.NIAT_CARDS[i] : null;
+    const entry = NIAT_CARDS ? NIAT_CARDS[i] : null;
     return entry && entry.url ? entry.url : '';
   }
 

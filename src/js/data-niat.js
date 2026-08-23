@@ -11,6 +11,8 @@
 // داده‌ها — نیات خیر (Niat Data)
 // ==========================================
 
+import { toFaChars, deepFreeze } from './utils.js';
+
 /* ——— نیت‌های خیر (منوی چندسطحی) ——— */
 const NIAT_CARDS_RAW = [
     { "title": "قلک بیمه" },
@@ -67,7 +69,7 @@ const NIAT_CARDS_RAW = [
  */
 function normalizeMenuTree(nodes = []) {
     const walk = (arr = []) => arr.map(n => {
-        const title = window.toFaChars(n.title);
+        const title = toFaChars(n.title);
         const node = { title };
         if (Array.isArray(n.menu) && n.menu.length) node.menu = walk(n.menu);
         if (Array.isArray(n.submenu) && n.submenu.length) node.submenu = walk(n.submenu);
@@ -97,14 +99,10 @@ function derivePaymentUrls(nodes = [], trail = []) {
     });
 }
 
-// Expose globals
-window.NIAT_CARDS_RAW = NIAT_CARDS_RAW;
-window.normalizeMenuTree = normalizeMenuTree;
+// Export for use in other modules
+export { NIAT_CARDS_RAW, normalizeMenuTree, derivePaymentUrls };
 
 // Initialize
-// نکته: چون این فایل بعد از utils.js لود می‌شود، توابع window.toFaChars موجود هستند
-try {
-    window.NIAT_CARDS = window.deepFreeze(derivePaymentUrls(normalizeMenuTree(NIAT_CARDS_RAW)));
-} catch (e) {
-    console.warn("Niat data initialization deferred (utils might not be ready)", e);
-}
+const NIAT_CARDS = deepFreeze(derivePaymentUrls(normalizeMenuTree(NIAT_CARDS_RAW)));
+
+export { NIAT_CARDS };
