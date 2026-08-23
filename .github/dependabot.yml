@@ -1,0 +1,16 @@
+# به‌روزرسانی خودکار اکشن‌های GitHub؛ پروژه وابستگی npm ندارد پس تنها همین اکوسیستم پایش می‌شود.
+# ---
+# Automated GitHub Actions updates; the project has no npm dependencies, so only this ecosystem is tracked.
+version: 2
+
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "dependencies"
+      - "ci"

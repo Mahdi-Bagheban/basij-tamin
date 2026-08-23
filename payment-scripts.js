@@ -4,10 +4,14 @@
  * Intent-form logic, client-side validation, and accessible UI interactions.
  */
 
+import { toEnDigits, toFaDigits, debounce, PigeonGlide } from './src/js/utils.js';
+import { PROVINCE_LIST, getCitiesOf } from './src/js/data.js';
+import { NIAT_CARDS } from './src/js/data-niat.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   // عناصر
   const params = new URLSearchParams(location.search);
-  const initialCause = params.get('cause') ? params.get('cause').replace(/_/g, ' ') : '';
+  const initialCause = params.get('cause') ? sanitizeText(params.get('cause')).replace(/_/g, ' ') : '';
   const pageTitle = document.getElementById('page-title');
   const provinceSel = document.getElementById('province');
   const citySel = document.getElementById('city');
@@ -28,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ابزار
   const faNF = new Intl.NumberFormat('fa-IR');
   const listFa = new Intl.ListFormat('fa', { type: 'conjunction', style: 'long' });
+  const sanitizeText = s => (s || '').replace(/[<>]/g, '');
 
   // استان/شهر (پیوند وابسته)
   provinceSel.disabled = false;
@@ -45,9 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // موبایل
   const mobileInput = document.getElementById('mobile');
-  const normalizeTo09 = raw => { let v = raw || ''; if (v.startsWith('0098')) v = v.slice(4); else if (v.startsWith('98')) v = v.slice(2); if (!v.startsWith('0')) v = '0' + v; return v; };
   mobileInput.addEventListener('input', () => { const raw = toEnDigits(mobileInput.value).replace(/[^\d]/g, ''); mobileInput.value = raw; });
-  mobileInput.addEventListener('blur', () => { const raw = toEnDigits(mobileInput.value).replace(/[^\d]/g, ''); if (!raw) return; const val = normalizeTo09(raw); if (/^09\d{9}$/.test(val)) mobileInput.value = toFaDigits(val); });
+  mobileInput.addEventListener('blur', () => { const raw = toEnDigits(mobileInput.value).replace(/[^\d]/g, ''); if (!raw) return; const val = normalizeMobile(raw); if (/^09\d{9}$/.test(val)) mobileInput.value = toFaDigits(val); });
   mobileInput.addEventListener('focus', () => { const raw = toEnDigits(mobileInput.value).replace(/[^\d]/g, ''); mobileInput.value = raw; });
 
   // کمک‌ها
@@ -96,8 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const dur = 760 + Math.random() * 420; const start = performance.now();
     requestAnimationFrame(function anim(t) {
       const k = Math.min(1, (t - start) / dur); const ease = k < .5 ? 2 * k * k : -1 + (4 - 2 * k) * k;
-      const x = (1 - ease) * (1 - ease) * startX + 2 * (1 - ease) * ease * midX + ease * ease * endX;
-      const y = (1 - ease) * (1 - ease) * startY + 2 * (1 - ease) * ease * midY + ease * ease * endY;
+      const x = (1 - ease) * (1 - ease) * startX + 2 * (1 - ease) * ease * midX + 2 * (1 - ease) * ease * midX + ease * ease * endX;
+      const y = (1 - ease) * (1 - ease) * startY + 2 * (1 - ease) * ease * midY + 2 * (1 - ease) * ease * endY;
       fly.style.opacity = String(Math.min(1, k * 1.2));
       fly.style.transform = `translate3d(${x - startX}px, ${y - startY}px, 0) scale(${.92 + .08 * k}) rotate(${(k * 20 - 10).toFixed(1)}deg)`;
       if (k < 1) requestAnimationFrame(anim); else { fly.remove(); onDone?.(); }
@@ -184,16 +188,26 @@ document.addEventListener('DOMContentLoaded', () => {
   function rovingFocus(panel) {
     const items = [...panel.querySelectorAll('.menu-item')];
     if (!items.length) return;
-    let idx = 0;
     items.forEach((it, i) => { it.tabIndex = i === 0 ? 0 : -1; });
-    const setActive = i => { items[idx].tabIndex = -1; idx = (i + items.length) % items.length; items[idx].tabIndex = 0; items[idx].focus(); };
-    panel.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowDown') { e.preventDefault(); setActive(idx + 1); }
-      else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(idx - 1); }
-      else if (e.key === 'Home') { e.preventDefault(); setActive(0); }
-      else if (e.key === 'End') { e.preventDefault(); setActive(items.length - 1); }
-      else if (e.key === 'Escape') { e.preventDefault(); const parentBtn = panel.previousElementSibling; panel.classList.remove('open'); panel.setAttribute('aria-hidden', 'true'); parentBtn?.setAttribute('aria-expanded', 'false'); parentBtn?.focus(); }
-    });
+    // The roving index lives on the node: this runs on every open, so it must survive re-entry.
+    panel._rovingIndex = 0;
+    const setActive = i => {
+      items[panel._rovingIndex].tabIndex = -1;
+      panel._rovingIndex = (i + items.length) % items.length;
+      items[panel._rovingIndex].tabIndex = 0;
+      items[panel._rovingIndex].focus();
+    };
+    // Bind once per panel; re-binding on each open would stack handlers and multiply every keypress.
+    if (!panel._rovingBound) {
+      panel._rovingBound = true;
+      panel.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') { e.preventDefault(); setActive(panel._rovingIndex + 1); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(panel._rovingIndex - 1); }
+        else if (e.key === 'Home') { e.preventDefault(); setActive(0); }
+        else if (e.key === 'End') { e.preventDefault(); setActive(items.length - 1); }
+        else if (e.key === 'Escape') { e.preventDefault(); const parentBtn = panel.previousElementSibling; panel.classList.remove('open'); panel.setAttribute('aria-hidden', 'true'); parentBtn?.setAttribute('aria-expanded', 'false'); parentBtn?.focus(); }
+      });
+    }
     items[0].focus();
   }
   function smartPlace(panel, trigger) {
@@ -218,8 +232,9 @@ document.addEventListener('DOMContentLoaded', () => {
     removeBtn.addEventListener('click', () => {
       if (removeBtn.hasAttribute('disabled')) return;
       const key = getIntentKeyFromRow(row);
-      row.dispatchEvent(new CustomEvent('remove-intent', { bubbles: true, detail: { key } }));
       if (key) removeFlowerByKey(key);
+      // Release the per-row observer before detaching the node.
+      ro.disconnect();
       row.remove();
       updateRemoveState(); updateTotalAndTitle(); updateScrollMode();
     });
@@ -231,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     intentTrigger.setAttribute('aria-haspopup', 'menu'); intentTrigger.setAttribute('aria-expanded', 'false');
 
     const intentPanel = document.createElement('div'); intentPanel.className = 'intent-panel'; intentPanel.setAttribute('role', 'menu'); intentPanel.setAttribute('aria-hidden', 'true');
-    if (Array.isArray(NIAT_CARDS) && NIAT_CARDS.length) {
+    if (NIAT_CARDS && NIAT_CARDS.length) {
       intentPanel.appendChild(buildMenuList(NIAT_CARDS, (picked) => {
         intentTrigger.textContent = picked;
         closePanel(intentTrigger, intentPanel, true);
@@ -249,12 +264,14 @@ document.addEventListener('DOMContentLoaded', () => {
       smartPlace(panel, trigger); setTimeout(() => rovingFocus(panel), 0);
       const closer = (ev) => { if (!panel.contains(ev.target) && ev.target !== trigger) { closePanel(trigger, panel, true); document.removeEventListener('pointerdown', closer, true); } };
       document.addEventListener('pointerdown', closer, true);
-      panel.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); closePanel(trigger, panel, true); } });
     }
     function closePanel(trigger, panel, returnFocus) {
       panel.classList.remove('open'); panel.setAttribute('aria-hidden', 'true'); trigger.setAttribute('aria-expanded', 'false');
       if (returnFocus) trigger.focus();
     }
+
+    // Escape is bound once at creation; binding it inside openPanel would stack a new listener per open.
+    intentPanel.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); closePanel(intentTrigger, intentPanel, true); } });
 
     intentTrigger.addEventListener('click', (e) => { e.stopPropagation(); intentPanel.classList.contains('open') ? closePanel(intentTrigger, intentPanel, true) : openPanel(intentTrigger, intentPanel); });
     intentTrigger.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') { e.preventDefault(); openPanel(intentTrigger, intentPanel); } });
@@ -293,12 +310,13 @@ document.addEventListener('DOMContentLoaded', () => {
       smartPlace(amountPanel, amountTrigger); setTimeout(() => rovingFocus(amountPanel), 0);
       const closer = (ev) => { if (!amountPanel.contains(ev.target) && ev.target !== amountTrigger) { closePanel(amountTrigger, amountPanel, true); document.removeEventListener('pointerdown', closer, true); } };
       document.addEventListener('pointerdown', closer, true);
-      amountPanel.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); closePanel(amountTrigger, amountPanel, true); } });
     }
+    // Escape is bound once at creation; binding it inside openAmount would stack a new listener per open.
+    amountPanel.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); closePanel(amountTrigger, amountPanel, true); } });
     amountTrigger.addEventListener('click', (e) => { e.stopPropagation(); amountPanel.classList.contains('open') ? closePanel(amountTrigger, amountPanel, true) : openAmount(); });
     amountTrigger.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') { e.preventDefault(); openAmount(); } });
 
-    amountWrap.append(amountTrigger, amountSel, amountPanel); amountHolder.appendChild(amountWrap);
+    amountWrap.append(amountTrigger, amountSel, amountPanel); amountHolder.append(amountWrap);
 
     // مبلغ دلخواه
     const customHolder = document.createElement('div'); customHolder.className = 'custom-holder';
@@ -343,12 +361,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // نصب اجزا
     row.append(addBtn, intentBox, amountHolder, customHolder, removeBtn);
 
-    // بستن سراسری با Escape
-    function closeAllPanels() { document.querySelectorAll('.intent-panel.open, .amount-panel.open').forEach(p => p.classList.remove('open')); }
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeAllPanels(); } });
-
     return row;
   }
+
+  // بستن سراسری همهٔ پنل‌ها با Escape — یک شنونده برای کل صفحه
+  // Single document-level listener closes every open panel (no per-row listeners).
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.intent-panel.open, .amount-panel.open').forEach(p => {
+      p.classList.remove('open');
+      p.setAttribute('aria-hidden', 'true');
+      p.previousElementSibling?.setAttribute('aria-expanded', 'false');
+    });
+  });
 
   function updateRemoveState() {
     const rows = [...intentsWrap.querySelectorAll('.intent-row')];
@@ -456,9 +481,8 @@ document.addEventListener('DOMContentLoaded', () => {
       firstInvalid ||= el;
     };
     const mobileRaw = toEnDigits(mobile.value).replace(/[^\d]/g, '');
-    const norm = (v) => { let x = v; if (x.startsWith('0098')) x = x.slice(4); else if (x.startsWith('98')) x = x.slice(2); if (!x.startsWith('0')) x = '0' + x; return x; };
     if (fullname.value.trim().length < 3) invalidate(fullname, 'نام کامل را وارد کنید'); else err(fullname);
-    if (!/^09\d{9}$/.test(norm(mobileRaw))) invalidate(mobile, 'شماره موبایل صحیح نیست'); else err(mobile);
+    if (!/^09\d{9}$/.test(normalizeMobile(mobileRaw))) invalidate(mobile, 'شماره موبایل صحیح نیست'); else err(mobile);
     if (!provinceSel.value) invalidate(provinceSel, 'استان را انتخاب کنید'); else err(provinceSel);
     if (!citySel.value) invalidate(citySel, 'شهر را انتخاب کنید'); else err(citySel);
 
@@ -497,10 +521,12 @@ document.addEventListener('DOMContentLoaded', () => {
   redirectButton.addEventListener('click', () => {
     location.href = 'cards-form.html';
   });
+
   modalCloseButton.addEventListener('click', closeThankModal);
   thankModal.addEventListener('click', event => {
     if (event.target === thankModal) closeThankModal();
   });
+
   document.addEventListener('keydown', event => {
     if (!thankModal.classList.contains('show')) return;
     if (event.key === 'Escape') {
@@ -529,4 +555,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const pigeons = new PigeonGlide();
 });
+
 /* ساخته شده توسط مهدی باغبانپور بروجنی */

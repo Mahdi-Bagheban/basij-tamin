@@ -23,6 +23,30 @@ const sourceFiles = [
 const outputDirectory = path.join(root, 'site');
 const sourceReferencePattern = /\b(?:src|href)\s*=\s*["']([^"']+)["']/gi;
 const cssReferencePattern = /url\(\s*["']?([^"')]+)["']?\s*\)/gi;
+const inlineHandlerPattern = /\son[a-z]+\s*=\s*["']/i;
+// Pages that must stay free of inline scripts so a strict CSP can be applied.
+const cspStrictPages = ['cards-form.html', 'payment-form.html'];
+const inlineScriptPattern = /<script(?![^>]*\bsrc\s*=)[^>]*>/i;
+const cspMetaPattern = /<meta\s+http-equiv=["']Content-Security-Policy["']/i;
+
+/**
+ * بررسی نبود هندلر اینلاین، نبود اسکریپت اینلاین در صفحات سخت‌گیرانه و وجود متا-CSP.
+ * ---
+ * Ensures no inline handlers, no inline scripts on CSP-strict pages, and a CSP meta tag.
+ * @param {string} relativePath - مسیر نسبی فایل / file path relative to its root
+ * @param {string} content - محتوای HTML / HTML content
+ */
+function assertCspSafety(relativePath, content) {
+  if (inlineHandlerPattern.test(content)) {
+    throw new Error(`Inline event handler found (CSP regression): ${relativePath}`);
+  }
+  if (cspStrictPages.includes(path.basename(relativePath)) && inlineScriptPattern.test(content)) {
+    throw new Error(`Inline <script> found on a CSP-strict page: ${relativePath}`);
+  }
+  if (!cspMetaPattern.test(content)) {
+    throw new Error(`Missing Content-Security-Policy meta tag: ${relativePath}`);
+  }
+}
 
 function isExternalOrFragment(value) {
   return /^(?:[a-z][a-z\d+.-]*:|\/\/|#|data:|__SITE_ORIGIN__)/i.test(value);
@@ -43,6 +67,8 @@ async function assertFile(filePath) {
 async function validateReferences(filePath, rootDirectory) {
   const content = await readFile(filePath, 'utf8');
   const patterns = [sourceReferencePattern, cssReferencePattern];
+
+  if (/\.html$/i.test(filePath)) assertCspSafety(path.relative(rootDirectory, filePath), content);
 
   for (const pattern of patterns) {
     pattern.lastIndex = 0;

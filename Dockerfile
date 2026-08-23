@@ -17,14 +17,17 @@ ARG SITE_ORIGIN
 ENV SITE_ORIGIN=${SITE_ORIGIN}
 RUN npm run build
 
-FROM nginx:1.27-alpine
+FROM nginxinc/nginx-unprivileged:1.27-alpine
 
-# Remove the default page and add the custom configuration.
-RUN rm /etc/nginx/conf.d/default.conf
+# Custom configuration replaces the image default (already listening on 8080).
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy only the prepared public site into the final image.
 COPY --from=builder /app/site/ /usr/share/nginx/html/
+
+# اجرای سرویس با کاربر بدون‌امتیاز (UID 101)
+# Service runs as the unprivileged nginx user (UID 101)
+USER nginx
 
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --retries=3 \

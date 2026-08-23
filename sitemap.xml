@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- نقشهٔ سایت — توکن __SITE_ORIGIN__ هنگام دیپلوی خودکار با نشانی واقعی جایگزین می‌شود -->
-<!-- Site map; the __SITE_ORIGIN__ token is replaced with the real origin at deploy time -->
+<!-- Site map; __SITE_ORIGIN__ and __BUILD_DATE__ tokens are replaced at deploy time -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>__SITE_ORIGIN__/</loc>
+    <lastmod>__BUILD_DATE__</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>__SITE_ORIGIN__/cards-form.html</loc>
+    <lastmod>__BUILD_DATE__</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>__SITE_ORIGIN__/payment-form.html</loc>
+    <lastmod>__BUILD_DATE__</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
