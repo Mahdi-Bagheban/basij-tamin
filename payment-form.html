@@ -5,6 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#1E5939" />
   <title>درگاه ثبت خیر - بسیج تأمین اجتماعی</title>
 
   <!-- متا تگ‌های SEO -->
@@ -15,9 +16,18 @@
   <meta property="og:description" content="فرم ثبت پرداخت نیت خیر به صورت آنلاین">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fa_IR">
+
+  <!-- پیوندهای سئو و آیکن - نشانی مبدأ در زمان دیپلوی به‌صورت خودکار جایگزین می‌شود -->
+  <!-- SEO links; the __SITE_ORIGIN__ token is replaced with the real origin at deploy time -->
+  <link rel="canonical" href="__SITE_ORIGIN__/payment-form.html" />
+  <meta property="og:image" content="__SITE_ORIGIN__/images/logo/cards-page-title-desktop.webp" />
+  <meta property="og:url" content="__SITE_ORIGIN__/payment-form.html" />
+  <link rel="icon" href="images/logo/icon.webp" type="image/webp" />
+  <link rel="stylesheet" href="src/css/fonts.css" />
   <link rel="stylesheet" href="payment-styles.css" />
-  <!-- اسکریپت تحلیل (فایل مشترک) -->
-  <script src="src/js/clarity.js"></script>
+  <!-- اسکریپت تحلیل (فایل مشترک) - به‌صورت غیرمسدودکننده -->
+  <!-- Analytics shared script, deferred to avoid render blocking -->
+  <script src="src/js/clarity.js" defer></script>
 </head>
 
 <body>

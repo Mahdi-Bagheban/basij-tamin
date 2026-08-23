@@ -1,11 +1,12 @@
 <!-- به نام خداوند بخشنده مهربان -->
 <!doctype html>
-<html lang="fa" dir="rtl" data-version="6.7.8">
+<html lang="fa" dir="rtl" data-version="7.0.0">
 <head>
-  <!-- Version 6.7.8 -->
+  <!-- Version 7.0.0 -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="version" content="6.7.8">
+  <meta name="theme-color" content="#0b3a22">
+  <meta name="version" content="7.0.0">
   <meta name="description" content="درگاه پرداخت آنلاین گروه جهادی بسیج شهدای سازمان تأمین اجتماعی - کمک به نیازمندان، نذورات شرعی و امور خیریه">
   <meta name="author" content="گروه جهادی بسیج سازمان تأمین اجتماعی">
   <meta name="keywords" content="پرداخت آنلاین, بسیج, تأمین اجتماعی, نذر, صدقه, خیریه, کمک معیشتی">
@@ -13,6 +14,15 @@
   <meta property="og:description" content="پرداخت آنلاین به نیات خیر - بسیج سازمان تأمین اجتماعی">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fa_IR">
+  <meta property="og:site_name" content="درگاه پرداخت گروه جهادی بسیج">
+  <meta property="og:image" content="__SITE_ORIGIN__/images/logo/cards-page-title-desktop.webp">
+  <meta property="og:url" content="__SITE_ORIGIN__/">
+  <link rel="canonical" href="__SITE_ORIGIN__/">
+  <link rel="icon" href="images/logo/icon.webp" type="image/webp">
+  <!-- Preconnect for third-party analytics origin to reduce handshake latency -->
+  <link rel="preconnect" href="https://www.clarity.ms" crossorigin>
+  <!-- No-JS fallback: redirect to the main content page immediately -->
+  <noscript><meta http-equiv="refresh" content="0; url=cards-form.html"></noscript>
   <title>درگاه پرداخت گروه جهادی بسیج شهدای سازمان تامین اجتماعی</title>
 
   <!-- dotLottie player (خود-میزبان؛ کل محتوای dist در assets/vendor/ باشد) -->
@@ -31,7 +41,10 @@
       if (!customElements.get('dotlottie-player')) {
         const s = document.createElement('script');
         s.type = 'module';
-        s.src = 'https://cdn.jsdelivr.net/npm/@dotlottie/player-component@2/dist/dotlottie-player.mjs';
+        // Pinned version + SRI to block upstream supply-chain tampering
+        s.src = 'https://cdn.jsdelivr.net/npm/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs';
+        s.integrity = 'sha384-ypAFdIpmPhrhuVLN9fmIZaqZHGUVSzHiiplL/kPO2+gJ4Na4yRVbVt0YhyvWdbwn';
+        s.crossOrigin = 'anonymous';
         document.head.appendChild(s);
       }
     })();
@@ -207,6 +220,23 @@
     .credit.show{ opacity:1; transform:none; filter:none; }
     .credit-en{ direction:ltr; } .credit-fa{ direction:rtl; }
 
+    /* دکمه ردشدن از لودینگ */
+    .skip-loader{
+      margin-top:10px;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.25);
+      color:var(--fg);
+      font:inherit; font-size:14px; font-weight:600;
+      padding:10px 22px;
+      border-radius:999px;
+      cursor:pointer;
+      backdrop-filter:blur(6px);
+      transition:background .25s ease, transform .25s ease;
+    }
+    .skip-loader:hover{ background:rgba(255,255,255,.20); }
+    .skip-loader:focus-visible{ outline:2px solid #64c778; outline-offset:3px; }
+    .skip-loader:active{ transform:scale(.97); }
+
     @media (max-width:480px){
       .title-banner{ width: clamp(220px, 56vw, 420px); }
       :root{ --bar-h: 44px; }
@@ -217,9 +247,9 @@
     }
   </style>
 
-  <!-- اسکریپت تحلیل (فایل مشترک) -->
-  <!-- کارکرد: بارگذاری Clarity برای ردیابی تعاملات -->
-  <script src="src/js/clarity.js"></script>
+  <!-- اسکریپت تحلیل (فایل مشترک) - به‌صورت غیرمسدودکننده -->
+  <!-- کارکرد: بارگذاری Clarity برای ردیابی تعاملات بدون بلوک رندر -->
+  <script src="src/js/clarity.js" defer></script>
 </head>
 <body>
   <div class="page" aria-label="درگاه پرداخت">
@@ -247,7 +277,10 @@
       </div>
 
       <!-- نسخه زیر لودینگ و بالای کپی‌رایت -->
-      <div class="version" aria-label="نسخه">نسخه 6.7.8</div>
+      <div class="version" aria-label="نسخه">نسخه 7.0.0</div>
+
+      <!-- دکمه ردشدن از صفحه لودینگ - دسترس‌پذیر با کیبورد -->
+      <button type="button" id="skip-loader" class="skip-loader">ردشدن و ورود به درگاه ←</button>
     </section>
   </div>
 
@@ -270,11 +303,21 @@
     creditEN.classList.add("show");
     setTimeout(function(){ creditEN.classList.remove("show"); creditFA.classList.add("show"); }, 4000);
 
+    // Skip-to-content guard: navigate only once, from timer or user action
+    const NEXT_PAGE = "cards-form.html";
+    let navigated = false;
+    function goNext(){
+      if (navigated) return;
+      navigated = true;
+      window.location.href = NEXT_PAGE;
+    }
+    document.getElementById("skip-loader").addEventListener("click", goNext);
+
     // همگام‌سازی کامل با یک زمان‌سنج واحد و easing نرم
     // کارکرد: انیمیشن پیشروی نوار شیشه‌ای با ARIA به‌روزشونده
     const bar = document.querySelector(".glass-bar");
     const start = performance.now();
-    const DURATION = 8000; // ms
+    const DURATION = 2500; // ms — shortened splash for faster access to content
 
     // تابع ease نرم (cubic)
     const easeInOutCubic = (x) => (x < 0.5) ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3)/2;
@@ -294,7 +337,7 @@
 
     // هدایت به فرم کارت‌ها پس از پایان
     // کارکرد: انتقال خودکار به صفحه اصلی انتخاب مسیر پرداخت
-    setTimeout(function(){ window.location.href = "cards-form.html"; }, DURATION);
+    setTimeout(goNext, DURATION);
   </script>
 </body>
 </html>

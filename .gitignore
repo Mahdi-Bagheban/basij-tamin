@@ -1,0 +1,16 @@
+# درگاه پرداخت گروه جهادی بسیج — فایل‌های نادیده‌گرفته‌شده
+# Basij payment portal — ignored files
+
+# Operating systems — سیستم‌عامل‌ها
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors — ویرایشگرها
+.vscode/
+.idea/
+*.swp
+
+# Logs and temporary files — لاگ‌ها و فایل‌های موقت
+*.log
+node_modules/

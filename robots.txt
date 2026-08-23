@@ -1,0 +1,9 @@
+# درگاه پرداخت گروه جهادی بسیج — سیاست خزیدن
+# Basij payment portal — crawling policy for search-engine bots
+# توکن __SITE_ORIGIN__ هنگام دیپلوی خودکار با نشانی واقعی جایگزین می‌شود
+# The __SITE_ORIGIN__ token is replaced with the real origin at deploy time
+
+User-agent: *
+Allow: /
+
+Sitemap: __SITE_ORIGIN__/sitemap.xml

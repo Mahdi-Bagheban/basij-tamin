@@ -1,0 +1,12 @@
+# درگاه پرداخت گروه جهادی بسیج — ارکستراسیون خود-میزبانی
+# ---
+# Basij payment portal — self-hosting orchestration
+
+services:
+  web:
+    build: .
+    image: basij-tamin:latest
+    container_name: basij-tamin
+    ports:
+      - "8080:8080"
+    restart: unless-stopped

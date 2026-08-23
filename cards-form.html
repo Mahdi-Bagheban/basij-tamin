@@ -5,8 +5,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#1E5939" />
   <!-- عنوان و نسخه صفحه کارت‌ها -->
-  <title>درگاه پرداخت گروه جهادی - نیات خیر (6.7.8)</title>
+  <title>درگاه پرداخت گروه جهادی بسیج - نیات خیر</title>
 
   <!-- متا تگ‌های SEO -->
   <meta name="description" content="انتخاب نیت خیر - درگاه پرداخت گروه جهادی بسیج شهدای سازمان تأمین اجتماعی">
@@ -17,14 +18,21 @@
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fa_IR">
 
-  <!-- آیکن و استایل صفحه کارت‌ها -->
-  <!-- کارکرد: بارگذاری آیکن و فایل CSS اختصاصی کارت‌ها -->
+  <!-- پیوندهای سئو و آیکن - نشانی مبدأ در زمان دیپلوی به‌صورت خودکار جایگزین می‌شود -->
+  <!-- SEO links; the __SITE_ORIGIN__ token is replaced with the real origin at deploy time -->
+  <link rel="canonical" href="__SITE_ORIGIN__/cards-form.html" />
+  <meta property="og:image" content="__SITE_ORIGIN__/images/logo/cards-page-title-desktop.webp" />
+  <meta property="og:url" content="__SITE_ORIGIN__/cards-form.html" />
+
+  <!-- آیکن، فونت مشترک و استایل صفحه کارت‌ها -->
+  <!-- کارکرد: بارگذاری آیکن، فونت وزیر و فایل CSS اختصاصی کارت‌ها -->
   <link rel="icon" href="images/logo/icon.webp" type="image/webp" />
+  <link rel="stylesheet" href="src/css/fonts.css" />
   <link rel="stylesheet" href="cards-styles.css" />
 
-  <!-- اسکریپت تحلیل (فایل مشترک) -->
-  <!-- کارکرد: بارگذاری Clarity برای ردیابی تعاملات -->
-  <script src="src/js/clarity.js"></script>
+  <!-- اسکریپت تحلیل (فایل مشترک) - به‌صورت غیرمسدودکننده -->
+  <!-- کارکرد: بارگذاری Clarity برای ردیابی تعاملات بدون بلوک رندر -->
+  <script src="src/js/clarity.js" defer></script>
 </head>
 
 <body>
@@ -112,16 +120,16 @@
       </div>
 
       <!-- گرید کارت‌ها -->
-      <!-- کارکرد: هر کارت یا منوی چندسطحی (data-menu) دارد یا لینک مستقیم (data-url) -->
+      <!-- کارکرد: هر کارت با data-card به فهرست مشترک نیت‌ها در src/js/data.js وصل است (منبع واحد داده) -->
+      <!-- Grid of niat cards; each data-card index maps to the shared NIAT_CARDS list in src/js/data.js -->
       <div class="cards-container view-small" id="cards-container">
         <!-- 1: قلک بیمه (لینک مستقیم) -->
         <!-- کارکرد: هدایت با cause برای هم‌راستایی با payment-form -->
         <div class="card-wrap">
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
-          <article class="card" data-url="payment-form.html?cause=قلک_بیمه">
+          <article class="card" data-card="0">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-01.webp" alt="قلک بیمه"
-              onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-01.webp" alt="قلک بیمه" />
             <div class="card-overlay">
               <div class="card-title">قلک بیمه</div>
             </div>
@@ -132,28 +140,9 @@
         <!-- کارکرد: به‌روزرسانی ساختار مطابق ترتیب جدید «تجهیزات درمان» + «دارو» -->
         <div class="card-wrap">
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
-          <article class="card" data-menu='[
-            {"title":"داروهای بیماران سرطانی و صعب العلاج","url":"payment-form.html?cause=نذر_درمانی_داروهای_بیماران_سرطانی_و_صعب_العلاج"},
-            {"title":"کمک هزینه ناباروری","url":"payment-form.html?cause=نذر_درمانی_کمک_هزینه_ناباروری"},
-            {"title":"هزینه درمان بیماران ناتوان مالی","url":"payment-form.html?cause=نذر_درمانی_هزینه_درمان_بیماران_ناتوان_مالی"},
-            {"title":"تجهیزات درمان","submenu":[
-              {"title":"دستگاه دیالیز","url":"payment-form.html?cause=نذر_درمانی_تجهیزات_درمان_دستگاه_دیالیز"},
-              {"title":"جراحی چشم","url":"payment-form.html?cause=نذر_درمانی_تجهیزات_درمان_جراحی_چشم"},
-              {"title":"اکو قلب","url":"payment-form.html?cause=نذر_درمانی_تجهیزات_درمان_اکو_قلب"},
-              {"title":"سونوگرافی","url":"payment-form.html?cause=نذر_درمانی_تجهیزات_درمان_سونوگرافی"},
-              {"title":"سونوگرافی تخصصی","url":"payment-form.html?cause=نذر_درمانی_تجهیزات_درمان_سونوگرافی_تخصصی"},
-              {"title":"ماموگرافی","url":"payment-form.html?cause=نذر_درمانی_تجهیزات_درمان_ماموگرافی"},
-              {"title":"تجهیزات آزمایشگاه بیوشیمی","url":"payment-form.html?cause=نذر_درمانی_تجهیزات_درمان_تجهیزات_آزمایشگاه_بیوشیمی"},
-              {"title":"شمارشگر خون","url":"payment-form.html?cause=نذر_درمانی_تجهیزات_درمان_شمارشگر_خون"},
-              {"title":"دستگاه گاز خون","url":"payment-form.html?cause=نذر_درمانی_تجهیزات_درمان_دستگاه_گاز_خون"},
-              {"title":"لنز و تجهیزات چشم","url":"payment-form.html?cause=نذر_درمانی_تجهیزات_درمان_لنز_و_تجهیزات_چشم"},
-              {"title":"پروتزهای مفصل","url":"payment-form.html?cause=نذر_درمانی_تجهیزات_درمان_پروتزهای_مفصل"},
-              {"title":"پروتز ستون فقرات","url":"payment-form.html?cause=نذر_درمانی_تجهیزات_درمان_پروتز_ستون_فقرات"}
-            ]}
-          ]'>
+          <article class="card" data-card="1">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-02.webp" alt="نذر درمانی"
-              onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-02.webp" alt="نذر درمانی" />
             <div class="card-overlay">
               <div class="card-title">نذر درمانی</div>
             </div>
@@ -164,14 +153,9 @@
         <!-- کارکرد: آیتم‌های ساخت مراکز درمانی/بیمه‌ای/همراه‌سرا -->
         <div class="card-wrap">
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
-          <article class="card" data-menu='[
-            {"title":"ساخت مراکز درمانی","url":"payment-form.html?cause=نذر_سازندگی_ساخت_مراکز_درمانی"},
-            {"title":"ساخت مراکز بیمه‌ای","url":"payment-form.html?cause=نذر_سازندگی_ساخت_مراکز_بیمه‌ای"},
-            {"title":"ساخت همراه‌سرا","url":"payment-form.html?cause=نذر_سازندگی_ساخت_همراه‌سرا"}
-          ]'>
+          <article class="card" data-card="2">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-03.webp" alt="نذر سازندگی"
-              onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-03.webp" alt="نذر سازندگی" />
             <div class="card-overlay">
               <div class="card-title">نذر سازندگی</div>
             </div>
@@ -182,10 +166,9 @@
         <!-- کارکرد: مسیر مستقیم با cause -->
         <div class="card-wrap">
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
-          <article class="card" data-url="payment-form.html?cause=نذر_نان">
+          <article class="card" data-card="3">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-04.webp" alt="نذر نان"
-              onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-04.webp" alt="نذر نان" />
             <div class="card-overlay">
               <div class="card-title">نذر نان</div>
             </div>
@@ -196,14 +179,9 @@
         <!-- کارکرد: سه آیتم موکب -->
         <div class="card-wrap">
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
-          <article class="card" data-menu='[
-            {"title":"موکب کربلا","url":"payment-form.html?cause=مواکب_شهدای_بسیج_موکب_کربلا"},
-            {"title":"مواکب سراسر کشور","url":"payment-form.html?cause=مواکب_شهدای_بسیج_مواکب_سراسر_کشور"},
-            {"title":"چایخانه حضرت رضا (ع)","url":"payment-form.html?cause=مواکب_شهدای_بسیج_چایخانه_حضرت_رضا"}
-          ]'>
+          <article class="card" data-card="4">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-05.webp" alt="مواکب شهدای بسیج"
-              onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-05.webp" alt="مواکب شهدای بسیج" />
             <div class="card-overlay">
               <div class="card-title">مواکب شهدای بسیج</div>
             </div>
@@ -214,10 +192,9 @@
         <!-- کارکرد: مسیر مستقیم با cause -->
         <div class="card-wrap">
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
-          <article class="card" data-url="payment-form.html?cause=نذر_قربانی">
+          <article class="card" data-card="5">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-06.webp" alt="نذر قربانی"
-              onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-06.webp" alt="نذر قربانی" />
             <div class="card-overlay">
               <div class="card-title">نذر قربانی</div>
             </div>
@@ -228,15 +205,9 @@
         <!-- کارکرد: انتقال «کمک به جبهه مقاومت» به این منو؛ حذف آیتم قدیم زندانیان -->
         <div class="card-wrap">
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
-          <article class="card" data-menu='[
-            {"title":"نذر فرهنگی","url":"payment-form.html?cause=کمک_معیشتی_و_نذر_مؤمنانه_نذر_فرهنگی"},
-            {"title":"کمک به خرید جهیزیه","url":"payment-form.html?cause=کمک_معیشتی_و_نذر_مؤمنانه_کمک_به_خرید_جهیزیه"},
-            {"title":"کمک هزینه ازدواج","url":"payment-form.html?cause=کمک_معیشتی_و_نذر_مؤمنانه_کمک_هزینه_ازدواج"},
-            {"title":"کمک به جبهه مقاومت","url":"payment-form.html?cause=کمک_معیشتی_و_نذر_مؤمنانه_کمک_به_جبهه_مقاومت"}
-          ]'>
+          <article class="card" data-card="6">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-07.webp" alt="کمک معیشتی و نذر مؤمنانه"
-              onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-07.webp" alt="کمک معیشتی و نذر مؤمنانه" />
             <div class="card-overlay">
               <div class="card-title">کمک معیشتی و نذر مؤمنانه</div>
             </div>
@@ -247,27 +218,9 @@
         <!-- کارکرد: منوی تو در تو برای خمس/کفاره/فطریه + موارد مستقل -->
         <div class="card-wrap">
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
-          <article class="card" data-menu='[
-            {"title":"خمس","submenu":[
-              {"title":"خمس عام","url":"payment-form.html?cause=وجوهات_شرعی_خمس_عام"},
-              {"title":"خمس سادات","url":"payment-form.html?cause=وجوهات_شرعی_خمس_سادات"}
-            ]},
-            {"title":"کفاره","submenu":[
-              {"title":"کفاره عام","url":"payment-form.html?cause=وجوهات_شرعی_کفاره_عام"},
-              {"title":"کفاره سادات","url":"payment-form.html?cause=وجوهات_شرعی_کفاره_سادات"}
-            ]},
-            {"title":"فطریه","submenu":[
-              {"title":"فطریه عام","url":"payment-form.html?cause=وجوهات_شرعی_فطریه_عام"},
-              {"title":"فطریه سادات","url":"payment-form.html?cause=وجوهات_شرعی_فطریه_سادات"}
-            ]},
-            {"title":"خیرات اموات","url":"payment-form.html?cause=وجوهات_شرعی_خیرات_اموات"},
-            {"title":"ثلث مال","url":"payment-form.html?cause=وجوهات_شرعی_ثلث_مال"},
-            {"title":"رد مظالم","url":"payment-form.html?cause=وجوهات_شرعی_رد_مظالم"},
-            {"title":"صدقه","url":"payment-form.html?cause=وجوهات_شرعی_صدقه"}
-          ]'>
+          <article class="card" data-card="7">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-08.webp" alt="وجوهات شرعی"
-              onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-08.webp" alt="وجوهات شرعی" />
             <div class="card-overlay">
               <div class="card-title">وجوهات شرعی</div>
             </div>
@@ -278,10 +231,9 @@
         <!-- کارکرد: کارت جدید مستقل با لینک مستقیم -->
         <div class="card-wrap">
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
-          <article class="card" data-url="payment-form.html?cause=آزادی_زندانیان_غیرعمد">
+          <article class="card" data-card="8">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-09.webp" alt="آزادی زندانیان غیرعمد"
-              onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-09.webp" alt="آزادی زندانیان غیرعمد" />
             <div class="card-overlay">
               <div class="card-title">آزادی زندانیان غیرعمد</div>
             </div>
@@ -292,10 +244,9 @@
         <!-- کارکرد: مسیر مستقیم با cause -->
         <div class="card-wrap">
           <i class="card-deco narges narges-tl"></i><i class="card-deco narges narges-br"></i>
-          <article class="card" data-url="payment-form.html?cause=نذر_عام">
+          <article class="card" data-card="9">
             <span class="basij-flash"></span>
-            <img loading="lazy" src="images/cards/card-10.webp" alt="نذر عام"
-              onerror="this.onerror=null;this.src='images/cards/fallback.webp';this.classList.add('missing')" />
+            <img loading="lazy" src="images/cards/card-10.webp" alt="نذر عام" />
             <div class="card-overlay">
               <div class="card-title">نذر عام</div>
             </div>

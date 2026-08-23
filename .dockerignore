@@ -1,0 +1,14 @@
+# درگاه پرداخت گروه جهادی بسیج — فایل‌های خارج از بافت ساخت داکر
+# نگه‌داشتن گیت و فایل‌های توسعه بیرون از ایمیج نهایی
+# ---
+# Basij payment portal — keep git and dev files out of the Docker image
+
+.git
+.gitignore
+.gitattributes
+.github
+.dockerignore
+ANALYSIS*.md
+docker-compose.yml
+Dockerfile
+node_modules

@@ -113,6 +113,27 @@ function normalizeMenuTree(nodes = []) {
     return walk(nodes);
 }
 
+/**
+ * اشتقاق خودکار نشانی پرداخت برای برگ‌ها — عنوان‌های مسیر با زیرخط به هم می‌چسبند -
+ * Auto-derive payment URLs on leaf nodes; ancestor titles are joined with underscores.
+ * @param {Array} nodes - درخت نیت‌ها / niat tree
+ * @param {string[]} trail - عناوین مسیر تا این گره / ancestor title trail
+ * @returns {Array} همان درخت با افزودن `url` به برگ‌ها / same tree, leaves gain `url`
+ */
+function derivePaymentUrls(nodes = [], trail = []) {
+    return nodes.map(n => {
+        const path = trail.concat(n.title);
+        const children = n.menu || n.submenu;
+        if (Array.isArray(children) && children.length) {
+            const node = { title: n.title };
+            if (n.menu) node.menu = derivePaymentUrls(n.menu, path);
+            else node.submenu = derivePaymentUrls(n.submenu, path);
+            return node;
+        }
+        return { title: n.title, url: 'payment-form.html?cause=' + path.map(t => t.replace(/\s+/g, '_')).join('_') };
+    });
+}
+
 // Expose globals
 window.PROVINCES_CITIES_RAW = PROVINCES_CITIES_RAW;
 window.NIAT_CARDS_RAW = NIAT_CARDS_RAW;
@@ -129,7 +150,7 @@ try {
         const key = window.PROVINCE_LIST.find(p => COLL_FA.compare(p, window.toFaChars(provinceName)) === 0);
         return key ? window.PROVINCES_CITIES[key] : [];
     };
-    window.NIAT_CARDS = window.deepFreeze(normalizeMenuTree(NIAT_CARDS_RAW));
+    window.NIAT_CARDS = window.deepFreeze(derivePaymentUrls(normalizeMenuTree(NIAT_CARDS_RAW)));
 } catch (e) {
     console.warn("Data initialization deferred (utils might not be ready)", e);
 }

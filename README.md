@@ -1,16 +1,16 @@
 <div align="center">
 
-# 💳 درگاه پرداخت گروه جهادی بسیج — نسخه 6.7.8
+# 💳 درگاه پرداخت گروه جهادی بسیج — نسخه 7.0.0
 
 <img src="images/logo/cards-page-title-desktop.webp" alt="لوگوی پروژه" width="520" />
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-6.7.8-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-7.0.0-blue.svg)](#)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#مشارکت)
 
 **پروژه وب استاتیک برای مدیریت نیات خیر و پرداخت‌های آنلاین**
 
-[مشاهده دمو](#) • [گزارش باگ](#) • [درخواست ویژگی](#)
+[مشاهده دمو](https://mahdi-arts.github.io/Basij-Tamin/) • [گزارش باگ](https://github.com/Mahdi-Arts/Basij-Tamin/issues) • [درخواست ویژگی](https://github.com/Mahdi-Arts/Basij-Tamin/issues/new)
 
 </div>
 
@@ -105,11 +105,11 @@
 ### مراحل نصب
 
 ```bash
-# 1. کلون کردن مخزن
-git clone https://github.com/your-username/basij-pay-portal.git
+# 1. کلون کردن مخزن — Clone the repository
+git clone https://github.com/Mahdi-Arts/Basij-Tamin.git
 
-# 2. ورود به پوشه
-cd basij-pay-portal
+# 2. ورود به پوشه — Enter the folder
+cd Basij-Tamin
 
 # 3. اجرا با Live Server (VS Code)
 # یا باز کردن index.html در مرورگر
@@ -122,37 +122,62 @@ cd basij-pay-portal
 
 > **نکته:** در محیط محلی، Microsoft Clarity بارگذاری نمی‌شود.
 
+### تست محلی با سرور - Local Testing with a Static Server
+
+```bash
+python3 -m http.server 8080
+# سپس باز کنید: http://localhost:8080 — then open http://localhost:8080
+```
+
+### استقرار - Deployment
+
+- **گیت‌هاب پیجز (خودکار):** هر پوش به شاخهٔ اصلی، با ورک‌فلوی `.github/workflows/deploy.yml` به Pages دیپلوی می‌شود؛ توکن `__SITE_ORIGIN__` در فایل‌های HTML و `sitemap.xml` به‌صورت خودکار با نشانی واقعی جایگزین می‌گردد.
+- **خود-میزبانی (اختیاری):** با `docker compose up -d` سرویس `nginx` روی پورت ۸۰۸۰ بالا می‌آید — `Dockerfile`, `docker-compose.yml` and `nginx.conf` are provided for self-hosting with security headers.
+
 ---
 
 ## 📁 ساختار پروژه
 
 ```
-basij-pay-portal/
-├── 📄 index.html              # صفحه لودینگ
-├── 📄 cards-form.html         # صفحه کارت‌ها
-├── 📄 payment-form.html       # فرم پرداخت
-├── 📄 package.json            # تنظیمات پروژه
+Basij-Tamin/
+├── 📄 index.html              # صفحه لودینگ — splash/loading page
+├── 📄 cards-form.html         # صفحه کارت‌ها — niat cards page
+├── 📄 payment-form.html       # فرم پرداخت — payment form
+├── 📄 404.html                # صفحه خطا — branded 404 page
+├── 📄 package.json            # تنظیمات پروژه — project metadata
 │
-├── 🎨 cards-styles.css        # استایل کارت‌ها
-├── 🎨 payment-styles.css      # استایل فرم
+├── 🔍 robots.txt              # سیاست خزیدن — crawling policy
+├── 🗺️ sitemap.xml             # نقشهٔ سایت — site map
 │
-├── 📜 cards-scripts.js        # منطق کارت‌ها
-├── 📜 payment-scripts.js      # منطق فرم
+├── 🎨 cards-styles.css        # استایل کارت‌ها — cards styles
+├── 🎨 payment-styles.css      # استایل فرم — form styles
+│
+├── 📜 cards-scripts.js        # منطق کارت‌ها — cards logic
+├── 📜 payment-scripts.js      # منطق فرم — form logic
 │
 ├── 🖼️ src/
 │   ├── css/
-│   │   └── fonts.css          # فونت‌های مشترک
+│   │   └── fonts.css          # فونت‌های مشترک — shared fonts
 │   └── js/
-│       ├── utils.js           # توابع مشترک
-│       └── data.js            # داده‌های استان/نیت
+│       ├── clarity.js         # اسکریپت تحلیل (فقط روی HTTPS) — analytics (HTTPS only)
+│       ├── utils.js           # توابع مشترک — shared utilities
+│       └── data.js            # داده‌های استان/نیت (منبع واحد نشانی‌های پرداخت)
+│                              # provinces & niat data (single source of payment URLs)
 │
 ├── 🖼️ images/
-│   ├── cards/                 # تصاویر کارت‌ها
-│   ├── decorations/           # تزئینات
-│   └── logo/                  # لوگوها و آیکون‌ها
+│   ├── cards/                 # تصاویر کارت‌ها — card images
+│   ├── decorations/           # تزئینات — decorations
+│   └── logo/                  # لوگوها و آیکون‌ها — logos & icons
 │
-├── 📂 fonts/                   # فونت Vazirmatn
-└── 📂 assets/vendor/           # کتابخانه‌های جانبی
+├── 📂 fonts/                  # فونت Vazirmatn — Vazirmatn font
+├── 📂 assets/vendor/          # کتابخانه‌های جانبی — vendor libraries
+│
+├── 🐳 Dockerfile              # ایمیج خود-میزبانی — self-hosting image
+├── 🐳 docker-compose.yml      # ارکستراسیون — orchestration
+├── 🌐 nginx.conf              # پیکربندی وب‌سرور + هدرهای امنیتی — server config
+│
+├── ⚙️ .github/workflows/      # تست و دیپلوی خودکار — CI/CD (test + Pages deploy)
+└── 📜 LICENSE                 # مجوز MIT — MIT license
 ```
 
 ---
@@ -247,7 +272,16 @@ const NIAT_CARDS_RAW = [
 
 ## 🔄 تاریخچه نسخه‌ها
 
-### نسخه 6.7.8 (جاری)
+### نسخه 7.0.0 (جاری)
+- 🔍 **سئوی تکنیکال:** افزودن `robots.txt`، `sitemap.xml`، `canonical` و `og:image/og:url` به همهٔ صفحات
+- ⚡ **کاهش زمان اسپلش** از ۸ به ۲.۵ ثانیه + دکمهٔ «ردشدن» و فالبک `<noscript>`
+- 🧩 **منبع واحد داده:** حذف دوگانگی منوهای کارت‌ها و اشتقاق خودکار نشانی‌های پرداخت در `data.js`
+- 🔒 **آمادگی CSP:** حذف هندلرهای اینلاین `onerror` و انتقال فال‌بک تصاویر به جاوااسکریپت
+- 📉 **کاهش ≈۳.۸ مگابایتی** دارایی‌های بلااستفاده (ونیل، فونت، سورس‌مپ)
+- 🚀 **استقرار خودکار:** افزودن GitHub Actions برای دیپلوی روی GitHub Pages
+- 🐳 **خود-میزبانی اختیاری:** `Dockerfile`، `docker-compose.yml` و `nginx.conf` با هدرهای امنیتی
+
+### نسخه 6.7.8
 - 🛠️ **بدون وابستگی (Zero Dependency):** اجرای مستقیم فایل‌های HTML بدون نیاز به سرور
 - 🏥 **افزودن بخش نذر درمانی:** شامل ناباروری، بیماران صعب‌العلاج، تجهیزات درمان
 - ♻️ **بازسازی ماژول‌ها:** بهینه‌سازی `utils.js` و `data.js` برای بارگذاری سریع‌تر
