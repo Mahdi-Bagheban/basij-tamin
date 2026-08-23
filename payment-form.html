@@ -6,14 +6,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#1E5939" />
-  <title>درگاه ثبت خیر - بسیج تأمین اجتماعی</title>
+  <title>بررسی نیت خیر - بسیج تأمین اجتماعی</title>
 
   <!-- متا تگ‌های SEO -->
-  <meta name="description" content="فرم ثبت پرداخت نیت خیر - درگاه گروه جهادی بسیج شهدای سازمان تأمین اجتماعی">
+  <meta name="description" content="فرم انتخاب و بررسی نیت خیر گروه جهادی بسیج شهدای سازمان تأمین اجتماعی">
   <meta name="author" content="گروه جهادی بسیج سازمان تأمین اجتماعی">
-  <meta name="keywords" content="پرداخت آنلاین, نیت خیر, بسیج, تأمین اجتماعی, خیریه">
-  <meta property="og:title" content="ثبت نیت خیر - درگاه پرداخت بسیج">
-  <meta property="og:description" content="فرم ثبت پرداخت نیت خیر به صورت آنلاین">
+  <meta name="keywords" content="نیت خیر, بسیج, تأمین اجتماعی, خیریه, نذر">
+  <meta property="og:title" content="بررسی نیت خیر - بسیج تأمین اجتماعی">
+  <meta property="og:description" content="فرم انتخاب و بررسی نیت خیر">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fa_IR">
 
@@ -46,18 +46,18 @@
             <label for="fullname">نام و نام خانوادگی</label>
             <div class="field-wrapper">
               <input id="fullname" name="fullname" type="text" placeholder="نام و نام خانوادگی" autocomplete="name"
-                required />
+                aria-describedby="fullname-error" required />
             </div>
-            <small class="error"></small>
+            <small id="fullname-error" class="error" role="alert" aria-live="polite"></small>
           </div>
 
           <div class="input-group">
             <label for="mobile">شماره موبایل</label>
             <div class="field-wrapper">
               <input id="mobile" name="mobile" type="tel" placeholder="09xxxxxxxxx" inputmode="numeric"
-                autocomplete="tel" required />
+                autocomplete="tel" aria-describedby="mobile-error" required />
             </div>
-            <small class="error"></small>
+            <small id="mobile-error" class="error" role="alert" aria-live="polite"></small>
           </div>
         </div>
 
@@ -65,27 +65,28 @@
           <div class="input-group">
             <label for="province">استان</label>
             <div class="field-wrapper">
-              <select id="province" name="province" required>
+              <select id="province" name="province" aria-describedby="province-error" required>
                 <option value="" selected>استان را انتخاب کنید</option>
               </select>
             </div>
-            <small class="error"></small>
+            <small id="province-error" class="error" role="alert" aria-live="polite"></small>
           </div>
 
           <div class="input-group">
             <label for="city">شهر</label>
             <div class="field-wrapper">
-              <select id="city" name="city" required disabled>
+              <select id="city" name="city" aria-describedby="city-error" required disabled>
                 <option value="" selected>ابتدا استان را انتخاب کنید</option>
               </select>
             </div>
-            <small class="error"></small>
+            <small id="city-error" class="error" role="alert" aria-live="polite"></small>
           </div>
         </div>
 
         <hr class="divider" />
 
-        <div class="intents-wrapper" id="intents-wrapper"></div>
+        <div class="intents-wrapper" id="intents-wrapper" aria-describedby="intent-error"></div>
+        <p id="intent-error" class="error form-error" role="alert" aria-live="polite"></p>
 
         <section class="notes-section">
           <div class="input-group notes-block">
@@ -109,7 +110,7 @@
           <div id="bouquet" aria-label="دسته گل نرگس" role="img"></div>
 
           <div class="pay-actions">
-            <button id="pay-btn" class="btn primary" type="submit">با نام خدا پرداخت میکنم</button>
+            <button id="pay-btn" class="btn primary" type="submit">بررسی اطلاعات نیت</button>
           </div>
         </div>
       </form>
@@ -130,11 +131,14 @@
     </section>
   </div>
 
-  <div class="modal" id="thank-modal" role="dialog" aria-modal="true" aria-labelledby="thank-title">
+  <div class="modal" id="thank-modal" role="dialog" aria-modal="true" aria-labelledby="thank-title" aria-describedby="thank-message">
     <div class="modal-content thank-decor">
-      <h3 id="thank-title">سپاس از نیت ارزشمند شما</h3>
-      <p id="thank-message">هدایت به درگاه بانکی</p>
-      <button class="btn primary" id="redirect-btn" type="button">انتقال به درگاه بانکی</button>
+      <h3 id="thank-title">اطلاعات نیت بررسی شد</h3>
+      <p id="thank-message">اتصال به درگاه بانکی در این نسخه فعال نیست؛ هیچ تراکنشی ثبت یا ارسال نشده است.</p>
+      <div class="modal-actions">
+        <button class="btn primary" id="redirect-btn" type="button">بازگشت به انتخاب نیت</button>
+        <button class="btn" id="modal-close" type="button">بستن</button>
+      </div>
     </div>
   </div>
 

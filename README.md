@@ -131,8 +131,28 @@ python3 -m http.server 8080
 
 ### استقرار - Deployment
 
-- **گیت‌هاب پیجز (خودکار):** هر پوش به شاخهٔ اصلی، با ورک‌فلوی `.github/workflows/deploy.yml` به Pages دیپلوی می‌شود؛ توکن `__SITE_ORIGIN__` در فایل‌های HTML و `sitemap.xml` به‌صورت خودکار با نشانی واقعی جایگزین می‌گردد.
-- **خود-میزبانی (اختیاری):** با `docker compose up -d` سرویس `nginx` روی پورت ۸۰۸۰ بالا می‌آید — `Dockerfile`, `docker-compose.yml` and `nginx.conf` are provided for self-hosting with security headers.
+#### تولید خروجی آمادهٔ انتشار — Prepare a deployable output
+
+فایل `.env.example` را به `.env` کپی و نشانی عمومی نهایی سایت را وارد کنید. این نشانی برای `canonical`، Open Graph، `robots.txt` و `sitemap.xml` الزامی است.
+
+---
+
+Copy `.env.example` to `.env` and set the final public URL. This URL is required for canonical metadata, Open Graph, `robots.txt`, and `sitemap.xml`.
+
+```bash
+cp .env.example .env
+# سپس مقدار SITE_ORIGIN را با نشانی واقعی سایت جایگزین کنید.
+# Then replace SITE_ORIGIN with the real public site URL.
+set -a && . ./.env && set +a
+npm run validate
+npm run build
+python3 -m http.server 8080 --directory site
+```
+
+- **گیت‌هاب پیجز (خودکار) — GitHub Pages (automatic):** workflow مسیر `.github/workflows/pages.yml` در هر push به شاخهٔ `7.0` اعتبارسنجی، build و deploy را اجرا می‌کند. URL نهایی Pages در زمان build جایگزین می‌شود.
+- **خود-میزبانی (اختیاری) — Self-hosting (optional):** پس از ساخت `.env`، دستور `docker compose up -d --build` سایت آماده را روی پورت `8080` اجرا می‌کند. `Dockerfile`، `docker-compose.yml` و `nginx.conf` برای این مسیر فراهم شده‌اند.
+- **امنیت انتقال — Transport security:** TLS و HSTS باید در reverse proxy یا load balancer لایهٔ HTTPSِ نهایی پیکربندی شوند؛ Nginx این مخزن روی پورت داخلی `8080` سرویس می‌دهد.
+- **وضعیت پرداخت — Payment status:** این نسخه به PSP متصل نیست و هیچ تراکنشی را ثبت یا ارسال نمی‌کند؛ پیش از ادعای پرداخت یا انتقال بانکی، اتصال سمت سرور و callback امن PSP لازم است.
 
 ---
 

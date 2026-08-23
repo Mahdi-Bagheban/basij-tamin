@@ -1,4 +1,8 @@
-/* به نام خداوند بخشنده مهربان */
+/*
+ * تعاملات صفحهٔ انتخاب نیت، شامل کارت‌ها، منوها و تنظیمات نمای کاربر.
+ * ---
+ * Intent-selection page interactions, including cards, menus, and view preferences.
+ */
 
 document.addEventListener('DOMContentLoaded', () => {
   // ارجاع‌ها
@@ -164,24 +168,33 @@ document.addEventListener('DOMContentLoaded', () => {
     return Array.isArray(entry.menu) ? entry.menu : [];
   }
 
-  container?.addEventListener('click', (e) => {
-    const card = e.target.closest('.card');
-    if (!card) return;
+  function activateCard(card, clientX, clientY){
+    pigeons.burstAt(clientX, clientY);
 
-    // پرواز آرام کبوترها
-    pigeons.burstAt(e.clientX, e.clientY);
-
-    // منوی اختصاصی کارت از دادهٔ مشترک
     const items = getCardMenuItems(card);
     if (items.length){
-      e.stopPropagation();
-      openMenuAt(e, items);
+      openMenuAt({ clientX, clientY }, items);
       return;
     }
 
-    // لینک مستقیم کارت
     const url = getCardDirectUrl(card);
     if (url) window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  container?.addEventListener('click', (e) => {
+    const card = e.target.closest('.card');
+    if (!card) return;
+    e.stopPropagation();
+    activateCard(card, e.clientX, e.clientY);
+  });
+
+  container?.addEventListener('keydown', (e) => {
+    const card = e.target.closest('.card');
+    if (!card || !['Enter', ' '].includes(e.key)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const rect = card.getBoundingClientRect();
+    activateCard(card, rect.left + rect.width / 2, rect.top + rect.height / 2);
   });
 
   // نشانی مستقیم کارت‌های بدون زیرمنو -

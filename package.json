@@ -4,8 +4,9 @@
   "description": "Static site for Basij payment portal (GitHub Pages deploy)",
   "private": true,
   "scripts": {
-    "start": "echo \"Static project - open index.html via Live Server\"",
-    "build": "echo \"No build step - static deploy\""
+    "start": "echo \"Static project - use npm run build and serve ./site\"",
+    "validate": "node --check cards-scripts.js && node --check payment-scripts.js && node --check src/js/clarity.js && node --check src/js/data.js && node --check src/js/utils.js && node --check scripts/prepare-site.mjs && node --check scripts/validate-site.mjs && node scripts/validate-site.mjs",
+    "build": "node scripts/prepare-site.mjs"
   },
   "keywords": [],
   "author": "",

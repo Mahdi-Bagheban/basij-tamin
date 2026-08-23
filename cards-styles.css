@@ -290,12 +290,14 @@ body.tease-active .title-frame {
 .gateway-panel.collapsed .cards-container {
   opacity: 0;
   transform: translateY(-10px);
-  pointer-events: none
+  pointer-events: none;
+  visibility: hidden
 }
 
 .gateway-panel.expanded .cards-container {
   opacity: 1;
-  transform: translateY(0)
+  transform: translateY(0);
+  visibility: visible
 }
 
 .cards-container {
@@ -443,6 +445,11 @@ body.tease-active .title-frame {
 .card:active {
   transform: translateY(2px) scale(.985);
   box-shadow: var(--glow-active)
+}
+
+.card:focus-visible {
+  outline: 3px solid #f7d774;
+  outline-offset: 4px;
 }
 
 .basij-flash {

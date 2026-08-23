@@ -585,6 +585,25 @@ body::after {
   transform: translateY(-2px)
 }
 
+.btn:focus-visible {
+  outline: 3px solid #f7d774;
+  outline-offset: 3px;
+}
+
+.form-error {
+  min-height: 1.5em;
+  margin: 8px 0 0;
+  color: #b42318;
+  font-weight: 700;
+}
+
+.modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
 /* فاصله بین جمع مبلغ و دکمه؛ JS فقط به‌قدر نیاز افزایش می‌دهد */
 .pay-actions {
   position: relative;
@@ -837,6 +856,17 @@ body::after {
 
   50% {
     transform: translateY(-6px)
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

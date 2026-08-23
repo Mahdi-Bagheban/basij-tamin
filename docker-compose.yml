@@ -4,7 +4,10 @@
 
 services:
   web:
-    build: .
+    build:
+      context: .
+      args:
+        SITE_ORIGIN: ${SITE_ORIGIN:?Set SITE_ORIGIN in .env before building.}
     image: basij-tamin:latest
     container_name: basij-tamin
     ports:

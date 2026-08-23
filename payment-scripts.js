@@ -1,3 +1,9 @@
+/*
+ * منطق فرم نیت، اعتبارسنجی سمت کاربر و تعاملات دسترس‌پذیر رابط کاربری.
+ * ---
+ * Intent-form logic, client-side validation, and accessible UI interactions.
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
   // عناصر
   const params = new URLSearchParams(location.search);
@@ -13,6 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const totalLine = document.querySelector('.total-line');
   const summary = document.querySelector('.summary');
   const payActions = document.querySelector('.pay-actions');
+  const intentError = document.getElementById('intent-error');
+  const thankModal = document.getElementById('thank-modal');
+  const redirectButton = document.getElementById('redirect-btn');
+  const modalCloseButton = document.getElementById('modal-close');
+  let lastFocusedElement = null;
 
   // ابزار
   const faNF = new Intl.NumberFormat('fa-IR');
@@ -409,38 +420,111 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('resize', debounce(setHalfGap, 150));
   }
 
-  // ارسال
+  function setIntentError(message = '') {
+    intentError.textContent = message;
+    intentsWrap.setAttribute('aria-invalid', String(Boolean(message)));
+  }
+
+  function focusIntentError() {
+    intentsWrap.tabIndex = -1;
+    intentsWrap.focus();
+  }
+
+  function openThankModal() {
+    lastFocusedElement = document.activeElement;
+    thankModal.classList.add('show');
+    requestAnimationFrame(() => redirectButton.focus());
+  }
+
+  function closeThankModal() {
+    thankModal.classList.remove('show');
+    lastFocusedElement?.focus();
+  }
+
   form.addEventListener('submit', e => {
     e.preventDefault();
     const fullname = document.getElementById('fullname'), mobile = document.getElementById('mobile');
-    const err = (el, msg) => { const s = el.closest('.input-group').querySelector('.error'); s.textContent = msg || ''; }
-    let ok = true;
+    const err = (el, msg) => {
+      const message = el.closest('.input-group').querySelector('.error');
+      if (message.id) el.setAttribute('aria-describedby', message.id);
+      message.textContent = msg || '';
+      el.setAttribute('aria-invalid', String(Boolean(msg)));
+    };
+    let firstInvalid = null;
+    const invalidate = (el, message) => {
+      err(el, message);
+      firstInvalid ||= el;
+    };
     const mobileRaw = toEnDigits(mobile.value).replace(/[^\d]/g, '');
     const norm = (v) => { let x = v; if (x.startsWith('0098')) x = x.slice(4); else if (x.startsWith('98')) x = x.slice(2); if (!x.startsWith('0')) x = '0' + x; return x; };
-    if (fullname.value.trim().length < 3) { err(fullname, 'نام کامل را وارد کنید'); ok = false; }
-    if (!/^09\d{9}$/.test(norm(mobileRaw))) { err(mobile, 'شماره موبایل صحیح نیست'); ok = false; }
-    if (!provinceSel.value) { err(provinceSel, 'استان را انتخاب کنید'); ok = false; }
-    if (!citySel.value) { err(citySel, 'شهر را انتخاب کنید'); ok = false; }
-    if (!ok) return;
+    if (fullname.value.trim().length < 3) invalidate(fullname, 'نام کامل را وارد کنید'); else err(fullname);
+    if (!/^09\d{9}$/.test(norm(mobileRaw))) invalidate(mobile, 'شماره موبایل صحیح نیست'); else err(mobile);
+    if (!provinceSel.value) invalidate(provinceSel, 'استان را انتخاب کنید'); else err(provinceSel);
+    if (!citySel.value) invalidate(citySel, 'شهر را انتخاب کنید'); else err(citySel);
 
-    // افکت پرواز کبوترها (با استفاده از کلاس import شده)
+    const rows = [...intentsWrap.querySelectorAll('.intent-row')];
+    const validIntentRows = rows.filter(row => {
+      const intent = getIntentKeyFromRow(row);
+      const amount = parseAmount(row.querySelector('.amount-select'), row.querySelector('.custom-amount'));
+      return intent && intent !== 'نیت را انتخاب کنید' && amount > 0;
+    });
+    if (!validIntentRows.length) {
+      setIntentError('حداقل یک نیت و مبلغ معتبر را انتخاب کنید.');
+      if (!firstInvalid) firstInvalid = intentsWrap;
+    } else {
+      setIntentError();
+    }
+
+    if (firstInvalid) {
+      if (firstInvalid === intentsWrap) focusIntentError(); else firstInvalid.focus();
+      return;
+    }
+
+    // Trigger the existing visual confirmation only after validation succeeds.
     const b = (e.submitter || payBtn).getBoundingClientRect();
     pigeons.burstAt(b.left + b.width / 2, b.top + b.height / 2);
 
-    const rows = [...intentsWrap.querySelectorAll('.intent-row')];
     const intents = uniqueInOrder(rows.map(r => r.querySelector('.intent-trigger')?.textContent || ''));
     const name = fullname.value.trim();
     const joined = intents.length ? listFa.format(intents) : 'نیت خیر';
     document.getElementById('thank-message').textContent =
       intents.length <= 1
-        ? `${name} عزیز، از انتخاب نیت «${joined}» صمیمانه سپاسگزاریم؛ امید که به قبولی و برکت ختم شود.`
-        : `${name} نیک‌اندیش، از ثبت همزمان ${intents.length} نیت (${joined}) سپاسگزاریم؛ ان‌شاءالله مأجور باشید.`;
-    document.getElementById('thank-modal').classList.add('show');
+        ? `${name} عزیز، نیت «${joined}» برای بررسی آماده است؛ اتصال به درگاه بانکی در این نسخه فعال نیست و هیچ تراکنشی ثبت یا ارسال نشده است.`
+        : `${name} نیک‌اندیش، ${intents.length} نیت (${joined}) برای بررسی آماده است؛ اتصال به درگاه بانکی در این نسخه فعال نیست و هیچ تراکنشی ثبت یا ارسال نشده است.`;
+    openThankModal();
   });
 
-  // دکمه مودال
-  document.getElementById('redirect-btn').addEventListener('click', () => {
+  redirectButton.addEventListener('click', () => {
     location.href = 'cards-form.html';
+  });
+  modalCloseButton.addEventListener('click', closeThankModal);
+  thankModal.addEventListener('click', event => {
+    if (event.target === thankModal) closeThankModal();
+  });
+  document.addEventListener('keydown', event => {
+    if (!thankModal.classList.contains('show')) return;
+    if (event.key === 'Escape') {
+      closeThankModal();
+      return;
+    }
+    if (event.key !== 'Tab') return;
+
+    const focusable = [...thankModal.querySelectorAll('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+      .filter(element => !element.hidden && getComputedStyle(element).visibility !== 'hidden');
+    if (!focusable.length) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (!thankModal.contains(document.activeElement)) {
+      event.preventDefault();
+      (event.shiftKey ? last : first).focus();
+    } else if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
   });
 
   const pigeons = new PigeonGlide();

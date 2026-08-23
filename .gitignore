@@ -14,3 +14,9 @@ desktop.ini
 # Logs and temporary files — لاگ‌ها و فایل‌های موقت
 *.log
 node_modules/
+
+# Local deployment configuration and generated static output
+.env
+.env.*
+!.env.example
+site/
